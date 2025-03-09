@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,7 +92,7 @@
 
 @layer components {
   .glass-panel {
-    @apply backdrop-blur-md bg-black/50 border border-black/20 shadow-lg;
+    @apply backdrop-blur-md bg-black/50 border border-elsol-sage/10 shadow-lg;
   }
   
   .elsol-button {

@@ -4,12 +4,12 @@ import { Plane, CreditCard, Hotel, Compass, Globe, FileCheck, Users, Gift } from
 
 const ServiceItem = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl hover:transform hover:-translate-y-1 group">
+    <div className="glass-panel rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl hover:transform hover:-translate-y-1 group">
       <div className="mb-4 text-elsol-sage group-hover:text-elsol-sage-light transition-colors duration-300">
         <Icon size={32} strokeWidth={1.5} />
       </div>
-      <h3 className="text-xl font-semibold mb-2 text-elsol-black">{title}</h3>
-      <p className="text-elsol-gray-dark">{description}</p>
+      <h3 className="text-xl font-semibold mb-2 text-gray-100">{title}</h3>
+      <p className="text-gray-300">{description}</p>
     </div>
   );
 };
@@ -59,7 +59,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="elsol-section bg-gray-50">
+    <section id="services" className="elsol-section bg-black">
       <div className="text-center mb-12">
         <h2 className="section-heading">Our Services</h2>
         <p className="section-subheading mx-auto">

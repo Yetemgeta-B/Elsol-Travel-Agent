@@ -1,8 +1,7 @@
-
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User, Facebook, Twitter, Linkedin } from 'lucide-react';
-import { BlogPost } from '../components/BlogCard';
+import type { BlogPost } from '../components/BlogCard';
 
 // Sample blog posts data (same as in Blogs.tsx)
 const sampleBlogPosts: BlogPost[] = [

@@ -22,9 +22,9 @@ const Header = () => {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 mx-4 mt-4 rounded-full ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 mx-6 mt-6 rounded-full ${
         isScrolled 
-          ? 'py-3 glass-panel' 
+          ? 'py-3 backdrop-blur-md bg-black/30 border border-elsol-sage/10' 
           : 'py-5 bg-transparent'
       }`}
     >
@@ -96,7 +96,7 @@ const Header = () => {
         <div className={`md:hidden w-full transition-all duration-300 ease-in-out overflow-hidden ${
           mobileMenuOpen ? 'max-h-screen opacity-100 mt-5' : 'max-h-0 opacity-0'
         }`}>
-          <nav className="flex flex-col space-y-4 py-4">
+          <nav className="flex flex-col space-y-4 py-4 backdrop-blur-md bg-black/70 rounded-2xl px-4 mt-2">
             <Link 
               to="/#home" 
               className="font-medium px-2 py-1 text-gray-300 hover:text-elsol-sage transition-colors flex items-center"

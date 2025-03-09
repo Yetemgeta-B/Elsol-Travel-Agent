@@ -1,11 +1,11 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const Hero = () => {
   const images = [
-    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=80',
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80',
-    'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=2000&q=80'
+    'https://images.unsplash.com/photo-1518540089592-98b7b561ca1f?auto=format&fit=crop&w=2000&q=80', // airplane flying over clouds
+    'https://images.unsplash.com/photo-1519421353514-6e0940e5e151?auto=format&fit=crop&w=2000&q=80', // airplane flying above clouds
+    'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80'  // airplane window view
   ];
 
   return (

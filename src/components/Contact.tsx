@@ -67,53 +67,53 @@ const Contact = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
+              <div className="glass-panel rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-start">
                   <div className="mr-4 text-elsol-sage">
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Our Location</h3>
-                    <p className="text-elsol-gray-dark">Bole Medhanialem, Addis Ababa, Ethiopia</p>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-100">Our Location</h3>
+                    <p className="text-gray-300">Bole Medhanialem, Addis Ababa, Ethiopia</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
+              <div className="glass-panel rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-start">
                   <div className="mr-4 text-elsol-sage">
                     <Phone size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Call Us</h3>
-                    <p className="text-elsol-gray-dark">+251 911 234 567</p>
-                    <p className="text-elsol-gray-dark">+251 911 987 654</p>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-100">Call Us</h3>
+                    <p className="text-gray-300">+251 911 234 567</p>
+                    <p className="text-gray-300">+251 911 987 654</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
+              <div className="glass-panel rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-start">
                   <div className="mr-4 text-elsol-sage">
                     <Mail size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Email Us</h3>
-                    <p className="text-elsol-gray-dark">info@elsoltravel.com</p>
-                    <p className="text-elsol-gray-dark">bookings@elsoltravel.com</p>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-100">Email Us</h3>
+                    <p className="text-gray-300">info@elsoltravel.com</p>
+                    <p className="text-gray-300">bookings@elsoltravel.com</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
+              <div className="glass-panel rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-xl">
                 <div className="flex items-start">
                   <div className="mr-4 text-elsol-sage">
                     <Clock size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Working Hours</h3>
-                    <p className="text-elsol-gray-dark">Mon - Fri: 8:30AM - 6:00PM</p>
-                    <p className="text-elsol-gray-dark">Sat: 9:00AM - 1:00PM</p>
+                    <h3 className="text-lg font-semibold mb-1 text-gray-100">Working Hours</h3>
+                    <p className="text-gray-300">Mon - Fri: 8:30AM - 6:00PM</p>
+                    <p className="text-gray-300">Sat: 9:00AM - 1:00PM</p>
                   </div>
                 </div>
               </div>
@@ -121,12 +121,12 @@ const Contact = () => {
           </div>
 
           {/* Right side - Contact form */}
-          <div className="bg-white rounded-xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold mb-6 text-elsol-black">Send Us a Message</h3>
+          <div className="glass-panel rounded-xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold mb-6 text-gray-100">Send Us a Message</h3>
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-elsol-gray-dark mb-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
                     Full Name
                   </label>
                   <Input
@@ -136,11 +136,11 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="Your name"
                     required
-                    className="w-full"
+                    className="w-full bg-black/50 border-gray-700"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-elsol-gray-dark mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
                     Email Address
                   </label>
                   <Input
@@ -151,11 +151,11 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="your.email@example.com"
                     required
-                    className="w-full"
+                    className="w-full bg-black/50 border-gray-700"
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-elsol-gray-dark mb-1">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
                     Phone Number
                   </label>
                   <Input
@@ -164,11 +164,11 @@ const Contact = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Your phone number"
-                    className="w-full"
+                    className="w-full bg-black/50 border-gray-700"
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-elsol-gray-dark mb-1">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
                     Message
                   </label>
                   <Textarea
@@ -178,17 +178,17 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="How can we help you?"
                     required
-                    className="w-full min-h-[120px]"
+                    className="w-full min-h-[120px] bg-black/50 border-gray-700"
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-elsol-sage hover:bg-elsol-sage-light text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  className="w-full bg-elsol-sage hover:bg-elsol-sage-light text-black font-semibold py-3 px-6 rounded-lg transition-colors"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>

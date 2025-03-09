@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Star } from 'lucide-react';
 
@@ -12,15 +11,15 @@ interface TestimonialProps {
 
 const TestimonialCard: React.FC<TestimonialProps> = ({ name, position, quote, avatar, rating }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
+    <div className="glass-panel rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center">
           <div className="mr-4">
             <img src={avatar} alt={name} className="w-16 h-16 rounded-full object-cover" loading="lazy" />
           </div>
           <div>
-            <h4 className="font-bold text-lg">{name}</h4>
-            <p className="text-sm text-elsol-gray-dark">{position}</p>
+            <h4 className="font-bold text-lg text-gray-100">{name}</h4>
+            <p className="text-sm text-gray-300">{position}</p>
           </div>
         </div>
         <div className="flex">
@@ -35,7 +34,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ name, position, quote, av
           ))}
         </div>
       </div>
-      <p className="text-elsol-gray-dark italic">&ldquo;{quote}&rdquo;</p>
+      <p className="text-gray-300 italic">&ldquo;{quote}&rdquo;</p>
     </div>
   );
 };
@@ -66,7 +65,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="elsol-section bg-gray-50">
+    <section className="elsol-section bg-black">
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="section-heading">What Our Clients Say</h2>
