@@ -1,81 +1,135 @@
-
 import React from 'react';
-import { Plane, CreditCard, Hotel, Compass, Globe, FileCheck, Users, Gift } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  Plane, 
+  Hotel, 
+  Globe, 
+  CreditCard, 
+  Headphones, 
+  Shield,
+  Briefcase,
+  Map
+} from 'lucide-react';
 
-const ServiceItem = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => {
-  return (
-    <div className="glass-panel rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl hover:transform hover:-translate-y-1 group">
-      <div className="mb-4 text-elsol-sage group-hover:text-elsol-sage-light transition-colors duration-300">
-        <Icon size={32} strokeWidth={1.5} />
-      </div>
-      <h3 className="text-xl font-semibold mb-2 text-gray-100">{title}</h3>
-      <p className="text-gray-300">{description}</p>
-    </div>
-  );
+const services = [
+  {
+    icon: Plane,
+    title: "Flight Booking",
+    description: "International and domestic flight reservations with competitive rates and flexible options."
+  },
+  {
+    icon: Hotel,
+    title: "Hotel Reservations",
+    description: "Luxury and budget accommodations worldwide with exclusive deals and packages."
+  },
+  {
+    icon: Globe,
+    title: "Tour Packages",
+    description: "Customized tour packages for individuals and groups with expert guidance."
+  },
+  {
+    icon: CreditCard,
+    title: "Travel Insurance",
+    description: "Comprehensive travel insurance coverage for worry-free journeys."
+  },
+  {
+    icon: Headphones,
+    title: "24/7 Support",
+    description: "Round-the-clock customer support for all your travel needs and emergencies."
+  },
+  {
+    icon: Shield,
+    title: "Visa Assistance",
+    description: "Professional visa processing and documentation assistance."
+  },
+  {
+    icon: Briefcase,
+    title: "Corporate Travel",
+    description: "Specialized business travel solutions and corporate packages."
+  },
+  {
+    icon: Map,
+    title: "Adventure Tours",
+    description: "Exciting adventure tours and activities for thrill-seekers."
+  }
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.5 }
+  }
 };
 
 const Services = () => {
-  const services = [
-    {
-      icon: Plane,
-      title: "Air Tickets",
-      description: "Book domestic and international flights at competitive rates with our IATA accredited agency."
-    },
-    {
-      icon: FileCheck,
-      title: "Visa Processing",
-      description: "Hassle-free visa application services for major destinations around the world."
-    },
-    {
-      icon: Hotel,
-      title: "Hotel Booking",
-      description: "Find the perfect accommodation from our curated selection of hotels worldwide."
-    },
-    {
-      icon: Compass,
-      title: "Holiday Packages",
-      description: "All-inclusive vacation packages tailored to your preferences and budget."
-    },
-    {
-      icon: Globe,
-      title: "Group Tours",
-      description: "Join our guided group tours to popular destinations with experienced tour leaders."
-    },
-    {
-      icon: Users,
-      title: "Corporate Travel",
-      description: "Specialized business travel services for companies of all sizes."
-    },
-    {
-      icon: Gift,
-      title: "Travel Insurance",
-      description: "Comprehensive travel insurance packages for a worry-free journey."
-    },
-    {
-      icon: CreditCard,
-      title: "Payment Options",
-      description: "Flexible payment methods including installment plans for your convenience."
-    }
-  ];
-
   return (
-    <section id="services" className="elsol-section bg-black">
-      <div className="text-center mb-12">
-        <h2 className="section-heading">Our Services</h2>
-        <p className="section-subheading mx-auto">
-          Comprehensive travel solutions tailored to your needs
-        </p>
-      </div>
+    <section id="services" className="elsol-section section-bg-dark">
+      <div className="relative z-10">
+        <div className="text-center mb-16">
+          <motion.h2 
+            className="section-heading"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            Our Services
+          </motion.h2>
+          <motion.p 
+            className="section-subheading mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Comprehensive travel solutions tailored to your needs
+          </motion.p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {services.map((service, index) => (
-          <ServiceItem 
-            key={index} 
-            icon={service.icon} 
-            title={service.title} 
-            description={service.description} 
-          />
-        ))}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              className="glass-panel p-6 rounded-xl hover-lift hover-glow group"
+            >
+              <div className="flex items-start">
+                <div className="mr-4">
+                  <service.icon 
+                    size={24} 
+                    className="text-elsol-sage group-hover:scale-110 transition-transform duration-300" 
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-100 group-hover:text-elsol-sage transition-colors duration-300">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                    {service.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

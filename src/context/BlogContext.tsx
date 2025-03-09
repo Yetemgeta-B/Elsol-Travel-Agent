@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { BlogPost } from '../components/BlogCard';
+import { BlogPost } from '../types/blog';
 
 // Initial sample blog posts
 const initialBlogPosts: BlogPost[] = [

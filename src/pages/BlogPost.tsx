@@ -104,6 +104,20 @@ const BlogPost = () => {
               <div className="prose prose-lg max-w-none prose-headings:text-gray-200 prose-p:text-gray-300 prose-strong:text-gray-200 prose-a:text-elsol-sage mb-10">
                 <div dangerouslySetInnerHTML={{ __html: post.content }} />
               </div>
+
+              {/* Travel Details */}
+              {post.travelDetails && post.telegramMessage && (
+                <motion.div 
+                  className="mt-10 mb-10 p-6 rounded-xl bg-black/30 border border-elsol-sage"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  <pre className="whitespace-pre-wrap font-sans text-gray-300">
+                    {post.telegramMessage}
+                  </pre>
+                </motion.div>
+              )}
               
               {/* Share buttons */}
               <div className="border-t border-gray-800 pt-6 mt-10">

@@ -1,51 +1,63 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Blogs from "./pages/Blogs";
-import BlogPost from "./pages/BlogPost";
-import NotFound from "./pages/NotFound";
-import Dashboard from "./pages/admin/Dashboard";
-import Login from "./pages/admin/Login";
-import AdminRoute from "./components/AdminRoute";
+import React, { Suspense, lazy } from 'react';
+import Loading from './components/Loading';
 import { BlogProvider } from "./context/BlogContext";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Terms from "./pages/Terms";
+import { DestinationProvider } from "./context/DestinationContext";
+import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
+
+// Lazy load components
+const Index = lazy(() => import("./pages/Index"));
+const Blogs = lazy(() => import("./pages/Blogs"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const Login = lazy(() => import("./pages/admin/Login"));
+const Services = lazy(() => import("./pages/Services"));
+const Destinations = lazy(() => import("./pages/Destinations"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <BlogProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<Terms />} />
-            
-            {/* Admin routes */}
-            <Route path="/admin/login" element={<Login />} />
-            <Route 
-              path="/admin/dashboard" 
-              element={
-                <AdminRoute>
-                  <Dashboard />
-                </AdminRoute>
-              } 
-            />
-            
-            {/* Catch-all route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <DestinationProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/destinations" element={<Destinations />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/blogs" element={<Blogs />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                
+                {/* Admin routes */}
+                <Route path="/admin/login" element={<Login />} />
+                <Route 
+                  path="/admin/dashboard" 
+                  element={
+                    <AdminRoute>
+                      <Dashboard />
+                    </AdminRoute>
+                  } 
+                />
+                
+                {/* Catch-all route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </DestinationProvider>
       </BlogProvider>
     </TooltipProvider>
   </QueryClientProvider>

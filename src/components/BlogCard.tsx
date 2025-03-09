@@ -1,19 +1,9 @@
-
 import React from 'react';
-import { Calendar, Clock, User } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Calendar, Clock, User, Plane, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  readTime: string;
-  imageUrl: string;
-  slug: string;
-}
+import { formatDate } from '../lib/utils';
+import { BlogPost } from '../types/blog';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -21,38 +11,72 @@ interface BlogCardProps {
 
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   return (
-    <div className="bg-black/60 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-      <div className="aspect-video overflow-hidden">
-        <img 
-          src={post.imageUrl} 
-          alt={post.title}
-          className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-        />
-      </div>
-      <div className="p-6 flex-grow flex flex-col">
-        <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
-          <div className="flex items-center">
-            <Calendar size={14} className="mr-1 text-elsol-sage" />
-            <span>{post.date}</span>
-          </div>
-          <div className="flex items-center">
-            <Clock size={14} className="mr-1 text-elsol-sage" />
-            <span>{post.readTime}</span>
-          </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="glass-panel rounded-xl overflow-hidden hover-lift w-full"
+    >
+      <Link to={`/blog/${post.slug}`}>
+        <div className="relative h-48 sm:h-56">
+          <img
+            src={post.imageUrl}
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+          {post.travelDetails?.price && (
+            <div className="absolute top-4 right-4 bg-elsol-sage text-black px-3 py-1 rounded-full text-sm sm:text-base font-semibold">
+              {post.travelDetails.price}
+            </div>
+          )}
         </div>
-        <h3 className="text-xl font-bold mb-2 text-gray-200 line-clamp-2">{post.title}</h3>
-        <p className="text-gray-400 mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-center text-sm text-gray-400">
-            <User size={14} className="mr-1 text-elsol-sage" />
-            <span>{post.author}</span>
-          </div>
-          <Link to={`/blog/${post.slug}`} className="text-elsol-sage font-medium hover:underline">
-            Read More
-          </Link>
+
+        <div className="p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-semibold mb-2 text-elsol-sage line-clamp-2">
+            {post.title}
+          </h3>
+
+          {post.travelDetails ? (
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex items-center text-gray-400 text-sm sm:text-base">
+                <Plane className="w-4 h-4 mr-2 text-elsol-sage flex-shrink-0" />
+                <span className="truncate">{post.travelDetails.airline}</span>
+              </div>
+              <div className="flex items-center text-gray-400 text-sm sm:text-base">
+                <Calendar className="w-4 h-4 mr-2 text-elsol-sage flex-shrink-0" />
+                <span className="truncate">
+                  {formatDate(post.travelDetails.departureDate)} - {formatDate(post.travelDetails.returnDate)}
+                </span>
+              </div>
+              <div className="flex items-center text-gray-400 text-sm sm:text-base">
+                <Clock className="w-4 h-4 mr-2 text-elsol-sage flex-shrink-0" />
+                <span className="truncate">
+                  {post.travelDetails.departureTime} - {post.travelDetails.returnTime}
+                </span>
+              </div>
+              <div className="flex items-center text-gray-400 text-sm sm:text-base">
+                <Briefcase className="w-4 h-4 mr-2 text-elsol-sage flex-shrink-0" />
+                <span className="truncate">{post.travelDetails.baggage}</span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <p className="text-gray-400 mb-4 line-clamp-2 text-sm sm:text-base">{post.excerpt}</p>
+              <div className="flex items-center text-xs sm:text-sm text-gray-500 flex-wrap gap-2">
+                <div className="flex items-center">
+                  <User className="w-4 h-4 mr-1 text-elsol-sage" />
+                  <span className="truncate">{post.author}</span>
+                </div>
+                <span className="hidden sm:inline">•</span>
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-1 text-elsol-sage" />
+                  <span>{formatDate(post.date)}</span>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </div>
-    </div>
+      </Link>
+    </motion.div>
   );
 };
 
