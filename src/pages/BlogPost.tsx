@@ -9,7 +9,7 @@ const sampleBlogPosts: BlogPost[] = [
   {
     id: '1',
     title: 'Top 10 Hidden Gems in Ethiopia You Need to Visit',
-    excerpt: 'Discover Ethiopia's best-kept secrets beyond the usual tourist destinations. These lesser-known spots will take your breath away.',
+    excerpt: "Discover Ethiopia's best-kept secrets beyond the usual tourist destinations. These lesser-known spots will take your breath away.",
     content: `
       <p>Ethiopia is a land of stunning landscapes, rich history, and vibrant cultures. While attractions like Lalibela and the Danakil Depression are well-known, there are countless hidden treasures waiting to be discovered.</p>
       
@@ -37,7 +37,7 @@ const sampleBlogPosts: BlogPost[] = [
   {
     id: '2',
     title: 'How to Prepare for Your First International Flight',
-    excerpt: 'First time flying abroad? Here's everything you need to know, from packing tips to navigating airports and dealing with jet lag.',
+    excerpt: "First time flying abroad? Here's everything you need to know, from packing tips to navigating airports and dealing with jet lag.",
     content: `
       <p>Taking your first international flight can be both exciting and overwhelming. With proper preparation, you can ensure a smooth journey from takeoff to landing.</p>
       
@@ -94,7 +94,7 @@ const sampleBlogPosts: BlogPost[] = [
   {
     id: '5',
     title: 'Essential Travel Documents: What You Need for International Travel',
-    excerpt: 'A comprehensive checklist of all the documents you'll need for a smooth international travel experience.',
+    excerpt: "A comprehensive checklist of all the documents you'll need for a smooth international travel experience.",
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc vitae nunc. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc vitae nunc.',
     author: 'Hanna Girma',
     date: 'February 18, 2023',
