@@ -32,62 +32,54 @@ export class TelegramBot {
     travelDetails?: TravelDetails;
   }) {
     try {
-      const postUrl = `${window.location.origin}/blog/${post.slug}`;
+      // Use a hardcoded base URL for development, or window.location.origin for production
+      const baseUrl = process.env.NODE_ENV === 'development' 
+        ? 'https://elsol-experience.vercel.app' 
+        : window.location.origin;
+      const postUrl = `${baseUrl}/blog/${post.slug}`;
       
       let message: string;
       
       if (post.travelDetails) {
         // Format travel-specific post
         const td = post.travelDetails;
-        message = `🌟 ELSOL TRAVEL AGENCY 🌟
-Your Gateway to Seamless Journeys
-
-🛫 ${td.airline} SPECIAL OFFER 🛬
-
-📅 Travel Dates:
-🛫 Departure: ${td.departureDate} | ${td.departureTime}
-🛬 Return: ${td.returnDate} | ${td.returnTime}
-
-✨ Package Includes:
-✅ ${td.baggage} Baggage Allowance 🧳🎒
-✅ Expert Travel Assistance 📞
-✅ Flexible Booking Options 📝
-
-${td.price ? `💰 Special Price: ${td.price}\n` : ''}🔖 Limited Availability - Secure Your Seat Today!
-
-📬 Contact Us:
-${td.emails.map(email => `📧 ${email}`).join('\n')}
-${td.phones.map(phone => `📞 ${phone}`).join('\n')}
-
-🎯 Why Choose Us?
-✔️ Certified Travel Experts 🌐
-✔️ Best Price Guarantee 💸
-✔️ 24/7 Customer Support ⏰
-
-📖 Read more:
-🔍 <a href="${postUrl}">Click Here for Detailed Information →</a>
-
-✨ BOOK NOW & EMBARK ON YOUR DREAM JOURNEY! ✨
-
-${td.additionalInfo ? `\nℹ️ Additional Information:\n${td.additionalInfo}` : ''}`.trim();
+        message = `🌟 ELSOL TRAVEL AGENCY 🌟\n\n` +
+          `Your Gateway to Seamless Journeys\n\n` +
+          `🛫 ${td.airline} SPECIAL OFFER 🛬\n\n` +
+          `📅 Travel Dates:\n` +
+          `🛫 Departure: ${td.departureDate} | ${td.departureTime}\n` +
+          `🛬 Return: ${td.returnDate} | ${td.returnTime}\n\n` +
+          `✨ Package Includes:\n` +
+          `✅ ${td.baggage} Baggage Allowance\n` +
+          `✅ Expert Travel Assistance\n` +
+          `✅ Flexible Booking Options\n\n` +
+          `${td.price ? `💰 Special Price: ${td.price}\n\n` : ''}` +
+          `🔖 Limited Availability - Book Now!\n\n` +
+          `📬 Contact Us:\n` +
+          `${td.phones.map(phone => `📞 ${phone}`).join('\n')}\n` +
+          `${td.emails.map(email => `📧 ${email}`).join('\n')}\n\n` +
+          `🎯 Why Choose Us?\n` +
+          `✔️ Certified Travel Experts\n` +
+          `✔️ Best Price Guarantee\n` +
+          `✔️ 24/7 Customer Support\n\n` +
+          `${td.additionalInfo ? `ℹ️ Additional Information:\n${td.additionalInfo}\n\n` : ''}` +
+          `✨ BOOK NOW & EMBARK ON YOUR DREAM JOURNEY! ✨`;
       } else {
         // Format regular blog post
-        message = `
-<b>📝 New Blog Post</b>
-
-<b>${post.title}</b>
-
-${post.excerpt}
-
-✍️ By: ${post.author}
-
-<a href="${postUrl}">Read full article →</a>
-`.trim();
+        message = `📝 New Blog Post\n\n${post.title}\n\n${post.excerpt}\n\n✍️ By: ${post.author}\n\nRead more: ${postUrl}`;
       }
 
-      // First send the image if available
-      if (post.imageUrl) {
-        await this.sendPhoto(post.imageUrl, message);
+      // Check if the image URL is a base64 string
+      if (post.imageUrl && post.imageUrl.startsWith('data:image')) {
+        // Skip image for base64 data URLs
+        await this.sendMessage(message);
+      } else if (post.imageUrl) {
+        try {
+          await this.sendPhoto(post.imageUrl, message);
+        } catch (photoError) {
+          console.error('Failed to send photo, falling back to text-only message:', photoError);
+          await this.sendMessage(message);
+        }
       } else {
         await this.sendMessage(message);
       }
@@ -95,21 +87,27 @@ ${post.excerpt}
       return true;
     } catch (error) {
       console.error('Error sharing blog post to Telegram:', error);
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Telegram API Error: ${error.response?.data?.description || error.message}`);
+      }
       throw error;
     }
   }
 
-  private async sendMessage(text: string, parseMode: 'HTML' | 'Markdown' = 'HTML') {
+  private async sendMessage(text: string) {
     try {
       const response = await axios.post(`${this.apiUrl}/sendMessage`, {
         chat_id: this.channelId,
         text,
-        parse_mode: parseMode,
+        parse_mode: 'HTML',
         disable_web_page_preview: false
       });
       return response.data;
     } catch (error) {
       console.error('Error sending message to Telegram:', error);
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Telegram API Error: ${error.response?.data?.description || error.message}`);
+      }
       throw error;
     }
   }
@@ -119,13 +117,16 @@ ${post.excerpt}
       const response = await axios.post(`${this.apiUrl}/sendPhoto`, {
         chat_id: this.channelId,
         photo: photoUrl,
-        caption,
+        caption: caption.substring(0, 1024), // Telegram has a 1024 character limit for captions
         parse_mode: 'HTML'
       });
       return response.data;
     } catch (error) {
       console.error('Error sending photo to Telegram:', error);
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Telegram API Error: ${error.response?.data?.description || error.message}`);
+      }
       throw error;
     }
   }
-} 
+}

@@ -1,6 +1,6 @@
 # Elsol Travel Agency Website
 
-![Elsol Travel Agency](screenshots/hero.png)
+![Elsol Travel Agency](../elsol-experience/public/hero.png)
 
 ## About
 
@@ -31,16 +31,16 @@ Elsol Travel Agency is your trusted IATA accredited travel partner, dedicated to
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/home.png)
+![Home Page](../elsol-experience/public/hero1.png)
 *Beautiful hero section with dynamic background*
 
 ### Blog Section
-![Blog Page](screenshots/blog.png)
+![Blog Page](../elsol-experience/public/blog.png)
 *Travel updates and blog posts with modern card layout*
 
-### Admin Dashboard
-![Admin Dashboard](screenshots/admin.png)
-*Secure admin interface for content management*
+### Popular Destinations
+![Popular Destinations](../elsol-experience/public/destinations.png)
+*popular destination inside and outside ethiopia*
 
 ## Technology Stack
 
@@ -84,7 +84,7 @@ To provide personalized travel solutions that exceed our clients' expectations w
 - **Email:** [info@elsol.com](mailto:info@elsol.com)
 - **Location:** [Addis Ababa, Ethiopia](https://maps.google.com/?q=Addis+Ababa,Ethiopia)
 
-## Getting Started
+<!-- ## Getting Started
 
 1. Clone the repository:
    ```bash
@@ -106,7 +106,7 @@ To provide personalized travel solutions that exceed our clients' expectations w
 
 ## Contributing
 
-We welcome contributions! Please feel free to submit a Pull Request.
+We welcome contributions! Please feel free to submit a Pull Request. -->
 
 ## License
 

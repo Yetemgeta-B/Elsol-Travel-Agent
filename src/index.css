@@ -253,11 +253,11 @@
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #010101;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #95A78D;
+  background-color: #6ca93b;
   border-radius: 10px;
   border: 2px solid rgba(0, 0, 0, 0.8);
 }
@@ -292,6 +292,101 @@
     transform: scale(1);
   }
 }
+
+/* Loading Animation Styles */
+.glass-panel {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(108, 169, 59, 0.2);
+  box-shadow: 0 0 20px rgba(108, 169, 59, 0.1);
+}
+
+.cloud {
+  width: 60px;
+  height: 25px;
+  background-color: rgba(108, 169, 59, 0.1);
+  border-radius: 20px;
+  position: relative;
+  filter: drop-shadow(0 0 5px rgba(108, 169, 59, 0.1));
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(108, 169, 59, 0.1);
+  border-radius: 50%;
+}
+
+.cloud::before {
+  width: 30px;
+  height: 30px;
+  top: -12px;
+  left: 10px;
+}
+
+.cloud::after {
+  width: 20px;
+  height: 20px;
+  top: -8px;
+  right: 10px;
+}
+
+.plane-container {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+
+.plane {
+  width: 60px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236ca93b'%3E%3Cpath d='M21,16V14L13,9V3.5A1.5,1.5,0,0,0,11.5,2h0A1.5,1.5,0,0,0,10,3.5V9L2,14v2l8-2.5V19L8,20.5V22l3.5-1L15,22V20.5L13,19V13.5Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(0 0 8px rgba(108, 169, 59, 0.3));
+}
+
+.landmark {
+  width: 40px;
+  height: 80px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: contain;
+  filter: brightness(0) invert(1) sepia(1) saturate(1.5) hue-rotate(60deg) opacity(0.2);
+}
+
+.eiffel-tower {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2L6,7V9H8v11h3V15h2v5h3V9h2V7L12,2z'/%3E%3C/svg%3E");
+  height: 100px;
+}
+
+.burj-khalifa {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2L9,6v2h1v2h-1v2h1v2h-1v2h1v6h4v-6h1v-2h-1v-2h1v-2h-1V8h1V6L12,2z'/%3E%3C/svg%3E");
+  height: 120px;
+}
+
+.taj-mahal {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2C9,6,6,7,6,11c0,4,3,5,6,11c3-6,6-7,6-11C18,7,15,6,12,2z M12,12a2,2,0,1,1,2-2A2,2,0,0,1,12,12z'/%3E%3C/svg%3E");
+  height: 90px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.landmark {
+  animation: float 4s ease-in-out infinite;
+}
+
+.eiffel-tower { animation-delay: 0s; }
+.burj-khalifa { animation-delay: -1.3s; }
+.taj-mahal { animation-delay: -2.6s; }
 
 /* Lazy loading */
 .lazy-load-image-background.opacity {

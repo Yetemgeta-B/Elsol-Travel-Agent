@@ -42,7 +42,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       departureTime: '',
       returnTime: '',
       baggage: '',
-      phones: [],
+      phones: [''],  
       emails: [''],
       price: '',
       additionalInfo: ''
@@ -60,7 +60,8 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         imageUrl: post.imageUrl,
         slug: post.slug,
         travelDetails: post.travelDetails || {
-          ...formData.travelDetails
+          ...formData.travelDetails,
+          phones: [''] 
         }
       });
       setImagePreview(post.imageUrl);
@@ -71,7 +72,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) { 
         toast({
           title: "Error",
           description: "Image size should be less than 5MB",
@@ -125,7 +126,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   };
 
   const handlePhoneChange = (index: number, value: string) => {
-    const newPhones = [...formData.travelDetails.phones];
+    const newPhones = [...(formData.travelDetails.phones || [''])];
     newPhones[index] = value;
     setFormData({
       ...formData,
@@ -149,13 +150,23 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   };
 
   const addPhone = () => {
-    setFormData({
-      ...formData,
-      travelDetails: {
-        ...formData.travelDetails,
-        phones: [...formData.travelDetails.phones, '']
-      }
-    });
+    if (!formData.travelDetails.phones) {
+      setFormData({
+        ...formData,
+        travelDetails: {
+          ...formData.travelDetails,
+          phones: ['']
+        }
+      });
+    } else {
+      setFormData({
+        ...formData,
+        travelDetails: {
+          ...formData.travelDetails,
+          phones: [...formData.travelDetails.phones, '']
+        }
+      });
+    }
   };
 
   const removePhone = (index: number) => {
@@ -164,7 +175,17 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       ...formData,
       travelDetails: {
         ...formData.travelDetails,
-        phones: newPhones
+        phones: newPhones.length > 0 ? newPhones : [''] 
+      }
+    });
+  };
+
+  const handleDateChange = (field: 'departureDate' | 'returnDate', value: string) => {
+    setFormData({
+      ...formData,
+      travelDetails: {
+        ...formData.travelDetails,
+        [field]: value
       }
     });
   };
@@ -228,7 +249,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         content: formData.content,
         author: formData.author,
         imageUrl: formData.imageUrl,
-        slug: formData.slug,
+        slug: formData.slug || formData.title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, '-'),
         date: isEditing && post ? post.date : currentDate,
         readTime: isEditing && post ? post.readTime : "1 min read",
         telegramMessage: isTravelPost ? telegramMessage : undefined,
@@ -246,11 +267,20 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         });
       } else {
         addBlogPost(newPost);
-        await telegramBot.shareNewBlogPost(newPost);
-        toast({
-          title: "Success!",
-          description: "New post created and shared successfully",
-        });
+        try {
+          await telegramBot.shareNewBlogPost(newPost);
+          toast({
+            title: "Success!",
+            description: "Post created and shared to Telegram successfully",
+          });
+        } catch (telegramError) {
+          console.error('Error sharing to Telegram:', telegramError);
+          toast({
+            title: "Partial Success",
+            description: "Post created but failed to share to Telegram: " + (telegramError as Error).message,
+            variant: "destructive"
+          });
+        }
       }
       
       navigate('/admin/dashboard');
@@ -258,7 +288,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       console.error('Error saving post:', error);
       toast({
         title: "Error",
-        description: "Failed to save the post. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to save the post. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -557,60 +587,72 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 <label htmlFor="travel.departureDate" className="block text-sm font-medium text-gray-300">
                   Departure Date*
                 </label>
-                <Input
-                  id="travel.departureDate"
-                  name="travel.departureDate"
-                  value={formData.travelDetails.departureDate}
-                  onChange={handleChange}
-                  placeholder="e.g., Mar 18 ADDDXB"
-                  className="bg-black/60 border-gray-700 w-full"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    id="travel.departureDate"
+                    value={formData.travelDetails.departureDate}
+                    onChange={(e) => handleDateChange('departureDate', e.target.value)}
+                    className="w-full bg-black/60 border border-gray-700 text-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-elsol-sage focus:border-transparent transition-colors"
+                    required
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <p className="text-xs text-gray-400">Select departure date</p>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="travel.returnDate" className="block text-sm font-medium text-gray-300">
                   Return Date*
                 </label>
-                <Input
-                  id="travel.returnDate"
-                  name="travel.returnDate"
-                  value={formData.travelDetails.returnDate}
-                  onChange={handleChange}
-                  placeholder="e.g., Mar 22 DXBADD"
-                  className="bg-black/60 border-gray-700 w-full"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    id="travel.returnDate"
+                    value={formData.travelDetails.returnDate}
+                    onChange={(e) => handleDateChange('returnDate', e.target.value)}
+                    className="w-full bg-black/60 border border-gray-700 text-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-elsol-sage focus:border-transparent transition-colors"
+                    required
+                    min={formData.travelDetails.departureDate || new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <p className="text-xs text-gray-400">Select return date</p>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="travel.departureTime" className="block text-sm font-medium text-gray-300">
                   Departure Time*
                 </label>
-                <Input
-                  id="travel.departureTime"
-                  name="travel.departureTime"
-                  value={formData.travelDetails.departureTime}
-                  onChange={handleChange}
-                  placeholder="e.g., 04:45_09:55"
-                  className="bg-black/60 border-gray-700 w-full"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="time"
+                    id="travel.departureTime"
+                    name="travel.departureTime"
+                    value={formData.travelDetails.departureTime}
+                    onChange={handleChange}
+                    className="w-full bg-black/60 border border-gray-700 text-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-elsol-sage focus:border-transparent transition-colors"
+                    required
+                  />
+                </div>
+                <p className="text-xs text-gray-400">Select departure time</p>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="travel.returnTime" className="block text-sm font-medium text-gray-300">
                   Return Time*
                 </label>
-                <Input
-                  id="travel.returnTime"
-                  name="travel.returnTime"
-                  value={formData.travelDetails.returnTime}
-                  onChange={handleChange}
-                  placeholder="e.g., 16:05_19:35"
-                  className="bg-black/60 border-gray-700 w-full"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="time"
+                    id="travel.returnTime"
+                    name="travel.returnTime"
+                    value={formData.travelDetails.returnTime}
+                    onChange={handleChange}
+                    className="w-full bg-black/60 border border-gray-700 text-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-elsol-sage focus:border-transparent transition-colors"
+                    required
+                  />
+                </div>
+                <p className="text-xs text-gray-400">Select return time</p>
               </div>
             </div>
 
@@ -633,12 +675,13 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
               <label className="block text-sm font-medium text-gray-300">
                 Phone Numbers*
               </label>
-              {formData.travelDetails.phones.map((phone, index) => (
+              {(formData.travelDetails.phones || ['']).map((phone, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Input
-                    value={phone}
+                    value={phone || ''}
                     onChange={(e) => handlePhoneChange(index, e.target.value)}
                     placeholder="Phone number"
+                    type="tel"
                     className="bg-black/60 border-gray-700 w-full"
                     required
                   />
@@ -648,11 +691,11 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                     size="icon"
                     onClick={() => removePhone(index)}
                     className="hover:bg-red-500/20"
-                    disabled={formData.travelDetails.phones.length === 1}
+                    disabled={(formData.travelDetails.phones || ['']).length === 1}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
-                  {index === formData.travelDetails.phones.length - 1 && (
+                  {index === (formData.travelDetails.phones || ['']).length - 1 && (
                     <Button
                       type="button"
                       variant="outline"
