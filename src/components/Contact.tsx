@@ -56,7 +56,7 @@ const Contact = () => {
             <div className="rounded-xl overflow-hidden shadow-lg h-80 mb-8">
               {/* Map iframe - Replace with actual map */}
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5475983050266!2d38.7612!3d9.0059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMjEuMiJOIDM4wrA0NScwNC4zIkU!5e0!3m2!1sen!2sus!4v1624882898075!5m2!1sen!2sus" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4325.58014961361!2d38.7871945!3d8.995866099999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85c436b9f6c9%3A0x848a3cd3d1d0cd95!2sELSOL%20Travel%20Agent!5e1!3m2!1sen!2set!4v1741520410707!5m2!1sen!2set" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
@@ -74,7 +74,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-1 text-gray-100">Our Location</h3>
-                    <p className="text-gray-300">Bole Medhanialem, Addis Ababa, Ethiopia</p>
+                    <p className="text-gray-300">Bole Medhanialem, Milkomi city complex 1st floor, office #119 Addis Ababa, Ethiopia
+                    </p>
                   </div>
                 </div>
               </div>

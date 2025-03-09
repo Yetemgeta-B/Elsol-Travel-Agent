@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit2, Trash2, Share, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useBlogContext } from '@/context/BlogContext';
-import { toast } from '@/components/ui/use-toast';
-import BlogEditor from '@/components/BlogEditor';
-import { TelegramBot } from '@/services/TelegramBot';
+import { Plus, Edit2, Trash2, Share } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import BlogEditor from '../components/BlogEditor';
+import { useBlogContext } from '../context/BlogContext';
+import { TelegramBot } from '../services/TelegramBot';
+import { toast } from '../hooks/use-toast';
 
 const telegramBot = new TelegramBot();
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const navigate = useNavigate();
   const { blogPosts, deleteBlogPost } = useBlogContext();
   const [showEditor, setShowEditor] = useState(false);
@@ -28,14 +28,13 @@ const Dashboard = () => {
       });
       
       toast({
-        title: "Shared Successfully",
+        title: "Shared!",
         description: "Blog post has been shared to Telegram channel",
       });
     } catch (error) {
-      console.error('Error sharing to Telegram:', error);
       toast({
         title: "Sharing Failed",
-        description: "Failed to share post to Telegram channel. Please try again.",
+        description: "Failed to share post to Telegram channel",
         variant: "destructive"
       });
     } finally {
@@ -47,8 +46,8 @@ const Dashboard = () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       deleteBlogPost(postId);
       toast({
-        title: "Post Deleted",
-        description: "The blog post has been deleted successfully",
+        title: "Deleted",
+        description: "Blog post has been deleted",
       });
     }
   };
@@ -57,26 +56,25 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-bold text-elsol-sage">Admin Dashboard</h1>
+          <div className="space-x-4">
             <Button
-              onClick={() => navigate('/blogs')}
+              onClick={() => navigate('/blog')}
               variant="outline"
-              size="icon"
               className="border-elsol-sage text-elsol-sage hover:bg-elsol-sage hover:text-black"
             >
-              <ArrowLeft className="h-4 w-4" />
+              View Blog
             </Button>
-            <h1 className="text-3xl font-bold text-elsol-sage">Admin Dashboard</h1>
+            <Button
+              onClick={() => {
+                setEditingPost(null);
+                setShowEditor(true);
+              }}
+              className="bg-elsol-sage hover:bg-elsol-sage-light text-black"
+            >
+              <Plus className="h-4 w-4 mr-2" /> New Post
+            </Button>
           </div>
-          <Button
-            onClick={() => {
-              setEditingPost(null);
-              setShowEditor(true);
-            }}
-            className="bg-elsol-sage hover:bg-elsol-sage-light text-black"
-          >
-            <Plus className="h-4 w-4 mr-2" /> New Post
-          </Button>
         </div>
 
         {showEditor ? (
@@ -139,12 +137,6 @@ const Dashboard = () => {
                 </div>
               </div>
             ))}
-
-            {blogPosts.length === 0 && (
-              <div className="text-center py-12 glass-panel rounded-xl">
-                <p className="text-gray-400 text-lg">No blog posts yet. Create your first post!</p>
-              </div>
-            )}
           </div>
         )}
       </div>
@@ -152,4 +144,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard; 

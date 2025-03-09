@@ -1,127 +1,96 @@
-
 import React from 'react';
-import { Facebook, Instagram, Twitter, Linkedin, Send } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Add newsletter subscription logic here
-  };
-
   return (
-    <footer className="bg-elsol-black text-white pt-16 pb-8">
-      <div className="container mx-auto px-4 md:px-8 max-w-screen-2xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Company Information */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">ELSOL TRAVEL</h3>
-            <p className="text-white/80 mb-4">
-              Your trusted IATA accredited travel agency providing comprehensive travel solutions since 2017.
+    <footer className="footer-bg border-t border-elsol-sage/10">
+      <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="hover-glow p-4 rounded-xl transition-all duration-300">
+            <h3 className="text-lg font-semibold mb-4 text-white">ELSOL Travel</h3>
+            <p className="text-gray-400 mb-4">
+              Your trusted IATA accredited travel partner, providing exceptional service since 2017.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-elsol-sage transition-colors hover:scale-110 transform duration-300">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors" aria-label="Instagram">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-elsol-sage transition-colors hover:scale-110 transform duration-300">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors" aria-label="Twitter">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-elsol-sage transition-colors hover:scale-110 transform duration-300">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors" aria-label="LinkedIn">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-elsol-sage transition-colors hover:scale-110 transform duration-300">
                 <Linkedin size={20} />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+          <div className="hover-glow p-4 rounded-xl transition-all duration-300">
+            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#home" className="text-white/70 hover:text-elsol-sage transition-colors">Home</a>
+                <Link to="/" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">Home</Link>
               </li>
               <li>
-                <a href="#services" className="text-white/70 hover:text-elsol-sage transition-colors">Services</a>
+                <Link to="/services" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">Services</Link>
               </li>
               <li>
-                <a href="#destinations" className="text-white/70 hover:text-elsol-sage transition-colors">Destinations</a>
+                <Link to="/destinations" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">Destinations</Link>
               </li>
               <li>
-                <a href="#about" className="text-white/70 hover:text-elsol-sage transition-colors">About Us</a>
+                <Link to="/about" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">About Us</Link>
               </li>
               <li>
-                <a href="#contact" className="text-white/70 hover:text-elsol-sage transition-colors">Contact</a>
+                <Link to="/contact" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">Contact</Link>
               </li>
               <li>
-                <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors">Terms & Conditions</a>
-              </li>
-              <li>
-                <a href="#" className="text-white/70 hover:text-elsol-sage transition-colors">Privacy Policy</a>
+                <Link to="/blogs" className="text-gray-400 hover:text-elsol-sage transition-colors hover:translate-x-1 transform inline-block">Blogs</Link>
               </li>
             </ul>
           </div>
 
           {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <span className="mr-2 text-elsol-sage">📍</span>
-                <span className="text-white/70">Bole Medhanialem, Addis Ababa, Ethiopia</span>
+          <div className="hover-glow p-4 rounded-xl transition-all duration-300">
+            <h3 className="text-lg font-semibold mb-4 text-white">Contact Us</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start group">
+                <MapPin size={20} className="text-elsol-sage mt-1 mr-2 group-hover:scale-110 transition-transform duration-300" />
+                <span className="text-gray-400 group-hover:text-white transition-colors duration-300">
+                  Bole Medhanialem, Milkomi city complex 1st floor, office #119<br />
+                  Addis Ababa, Ethiopia
+                </span>
               </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-elsol-sage">📞</span>
-                <span className="text-white/70">+251 911 234 567</span>
+              <li className="flex items-center group">
+                <Phone size={20} className="text-elsol-sage mr-2 group-hover:scale-110 transition-transform duration-300" />
+                <a href="tel:+251911234567" className="text-gray-400 group-hover:text-white transition-colors duration-300">+251 911 234 567</a>
               </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-elsol-sage">✉️</span>
-                <span className="text-white/70">info@elsoltravel.com</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-elsol-sage">⏰</span>
-                <span className="text-white/70">Mon - Fri: 8:30AM - 6:00PM<br />Sat: 9:00AM - 1:00PM</span>
+              <li className="flex items-center group">
+                <Mail size={20} className="text-elsol-sage mr-2 group-hover:scale-110 transition-transform duration-300" />
+                <a href="mailto:info@elsol.travel" className="text-gray-400 group-hover:text-white transition-colors duration-300">info@elsol.travel</a>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-            <p className="text-white/70 mb-4">
-              Subscribe to receive updates on travel deals and promotions.
-            </p>
-            <form onSubmit={handleSubmit} className="flex space-x-2">
-              <Input 
-                type="email" 
-                placeholder="Your email address" 
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-elsol-sage"
-                required
-              />
-              <Button type="submit" className="bg-elsol-sage hover:bg-elsol-sage-light text-white">
-                <Send size={16} />
-              </Button>
-            </form>
-          </div>
-        </div>
-
-        {/* Payment Methods */}
-        <div className="border-t border-white/10 pt-8 mb-8">
-          <div className="flex flex-wrap justify-center space-x-4">
-            <p className="text-white/70 mb-2 w-full text-center">Payment Methods Accepted</p>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-8" style={{ filter: 'brightness(0) invert(1) opacity(0.7)' }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-8" style={{ filter: 'brightness(0) invert(1) opacity(0.7)' }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="American Express" className="h-8" style={{ filter: 'brightness(0) invert(1) opacity(0.7)' }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Paypal_logo.svg" alt="PayPal" className="h-8" style={{ filter: 'brightness(0) invert(1) opacity(0.7)' }} />
+          {/* Business Hours */}
+          <div className="hover-glow p-4 rounded-xl transition-all duration-300">
+            <h3 className="text-lg font-semibold mb-4 text-white">Business Hours</h3>
+            <ul className="space-y-2">
+              <li className="text-gray-400 hover:text-white transition-colors duration-300">Monday - Friday: 9:00 AM - 6:00 PM</li>
+              <li className="text-gray-400 hover:text-white transition-colors duration-300">Saturday: 9:00 AM - 3:00 PM</li>
+              <li className="text-gray-400 hover:text-white transition-colors duration-300">Sunday: Closed</li>
+            </ul>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="text-center border-t border-white/10 pt-8">
-          <p className="text-white/60 text-sm">
-            &copy; {new Date().getFullYear()} ELSOL Travel Agency. All rights reserved. | IATA Accredited Agent
+        <div className="mt-8 pt-4 border-t border-gray-800">
+          <p className="text-center text-gray-400 hover:text-white transition-colors duration-300 text-sm py-2">
+            © {new Date().getFullYear()} ELSOL Travel. All rights reserved.
           </p>
         </div>
       </div>

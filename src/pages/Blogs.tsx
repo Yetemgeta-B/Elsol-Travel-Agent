@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import { Search } from 'lucide-react';
@@ -6,6 +5,7 @@ import { useBlogContext } from '../context/BlogContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
+import AdminButton from '../components/AdminButton';
 
 const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,6 +97,9 @@ const Blogs = () => {
       </div>
       
       <Footer />
+      
+      {/* Admin Button outside the section for proper positioning */}
+      <AdminButton />
     </div>
   );
 };

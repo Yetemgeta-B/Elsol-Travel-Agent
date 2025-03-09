@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -8,6 +7,7 @@ import About from '../components/About';
 import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import ScrollButtons from '../components/ScrollButtons';
 
 const Index = () => {
   // Smooth scroll implementation
@@ -41,6 +41,7 @@ const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      <ScrollButtons />
       <main className="flex-grow">
         <Hero />
         <Services />
