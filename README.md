@@ -1,6 +1,6 @@
 # Elsol Travel Agency Website
 
-![Elsol Travel Agency](../elsol-experience/public/hero.png)
+![Elsol Travel Agency](./public/hero.png)
 
 ## About
 
@@ -31,15 +31,15 @@ Elsol Travel Agency is your trusted IATA accredited travel partner, dedicated to
 ## Screenshots
 
 ### Home Page
-![Home Page](../elsol-experience/public/hero1.png)
+![Home Page](./public/hero1.png)
 *Beautiful hero section with dynamic background*
 
 ### Blog Section
-![Blog Page](../elsol-experience/public/blog.png)
+![Blog Page](./public/blog.png)
 *Travel updates and blog posts with modern card layout*
 
 ### Popular Destinations
-![Popular Destinations](../elsol-experience/public/destinations.png)
+![Popular Destinations](./public/destinations.png)
 *popular destination inside and outside ethiopia*
 
 ## Technology Stack
