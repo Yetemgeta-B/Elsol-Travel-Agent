@@ -83,6 +83,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(10,10,10,0.85));
   }
 
   html {
@@ -124,6 +125,24 @@
   .delay-12s {
     animation-delay: -12s;
   }
+
+  /* New styles for transitions and glow effects */
+  .hover:shadow-glow:hover {
+    box-shadow: 0 0 15px rgba(83, 133, 44, 0.5), 0 0 30px rgba(83, 133, 44, 0.3);
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(83, 133, 44, 0.5);
+  }
+  
+  .transition-smooth {
+    transition: all 0.4s cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .bg-gradient-glass {
+    background: linear-gradient(135deg, rgba(10,10,10,0.7), rgba(0,0,0,0.8));
+    backdrop-filter: blur(10px);
+  }
 }
 
 .lazy-load-image-background.opacity {
@@ -133,4 +152,27 @@
 
 .lazy-load-image-background.opacity.lazy-load-image-loaded {
   opacity: 1;
+}
+
+/* New Page Transition Animation */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
 }

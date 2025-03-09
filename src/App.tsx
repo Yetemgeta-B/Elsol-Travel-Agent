@@ -12,6 +12,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import Login from "./pages/admin/Login";
 import AdminRoute from "./components/AdminRoute";
 import { BlogProvider } from "./context/BlogContext";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
             
             {/* Admin routes */}
             <Route path="/admin/login" element={<Login />} />
