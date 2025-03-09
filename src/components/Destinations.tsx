@@ -4,59 +4,59 @@ import { Navigation, Calendar, DollarSign } from 'lucide-react';
 
 const destinations = [
   {
-    image: "https://images.unsplash.com/photo-1597975371270-cf810771f7f5?auto=format&fit=crop&w=800&q=80",
+    image: "https://media.istockphoto.com/id/697529054/photo/the-church-of-saint-george-in-lalibela.jpg?s=612x612&w=0&k=20&c=j3ua9h08NmxB9tym1qyP4Y378OAn1famGva6dA9CZO8=",
       name: "Lalibela",
     description: "Explore the ancient rock-hewn churches",
-    price: "From $599",
+    price: "From 5,999 birr",
     duration: "3-5 days"
   },
   {
-    image: "https://images.unsplash.com/photo-1589308454676-62ed2a0fb2a8?auto=format&fit=crop&w=800&q=80",
+    image: "https://cdn.britannica.com/23/93423-050-107B2836/obelisk-kingdom-Aksum-Ethiopian-name-city.jpg?w=300",
     name: "Axum",
     description: "Discover the ancient kingdom of Axum",
-    price: "From $499",
+    price: "From 6,750 birr",
     duration: "2-4 days"
   },
   {
     image: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
-    name: "Simien Mountains",
-    description: "Trek through breathtaking landscapes",
-    price: "From $699",
+    name: "Dubai",
+    description: "Enjoy the most enjoyable place",
+    price: "From 60,000 birr",
     duration: "4-7 days"
   },
   {
     image: "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?auto=format&fit=crop&w=800&q=80",
-    name: "Danakil Depression",
+    name: "Thailand",
     description: "Experience the world's hottest place",
-    price: "From $799",
+    price: "From 79,999 birr",
     duration: "3-6 days"
   },
   {
     image: "https://images.unsplash.com/photo-1523192193543-6e7296d960e4?auto=format&fit=crop&w=800&q=80",
-    name: "Omo Valley",
-    description: "Meet indigenous tribes and cultures",
-    price: "From $899",
+    name: "China",
+    description: "Meet the tallest buildings in the world",
+    price: "From 5,999 birr",
     duration: "5-8 days"
   },
   {
-    image: "https://images.unsplash.com/photo-1524234107056-1c1f48f64ab8?auto=format&fit=crop&w=800&q=80",
+    image: "https://media.istockphoto.com/id/618832938/photo/fasilidas-palace-in-fasil-ghebbi-site-gonder.jpg?s=612x612&w=0&k=20&c=gxUWJntla_3ecm9I0-nx_ryikS8Bynb46v1fEWUSCoA=",
     name: "Gondar",
     description: "Visit the medieval castles and churches",
-    price: "From $449",
+    price: "From 5,999 birr",
     duration: "2-4 days"
   },
   {
-    image: "https://images.unsplash.com/photo-1553685502-9dc47d4e3c54?auto=format&fit=crop&w=800&q=80",
+    image: "https://media.istockphoto.com/id/526809323/photo/view-of-the-bale-mountains-national-park-ethiopia.jpg?s=612x612&w=0&k=20&c=xZnvZNlESQoHLkXaqi3l4IQKf3tb49EwtEX98YABTTk=",
     name: "Bale Mountains",
     description: "Spot rare wildlife and endemic species",
-    price: "From $649",
+    price: "From 3,789 birr",
     duration: "4-6 days"
   },
   {
-    image: "https://images.unsplash.com/photo-1590094233767-f8e1c7e5aee8?auto=format&fit=crop&w=800&q=80",
+    image: "https://media.istockphoto.com/id/480958609/photo/tiss-abay-falls-on-the-blue-nile-river-ethiopia.jpg?s=612x612&w=0&k=20&c=wljYjFrMNNPdgtDPAkTFYD4sUsyqp-7-_oYTlj6AExA=",
     name: "Lake Tana",
     description: "Explore ancient monasteries and islands",
-    price: "From $399",
+    price: "From 9,899 birr",
     duration: "2-3 days"
   }
 ];
@@ -101,7 +101,7 @@ const Destinations = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Discover Ethiopia's most breathtaking locations
+            Discover Ethiopia's and world wide most breathtaking locations 
           </motion.p>
       </div>
 

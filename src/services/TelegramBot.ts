@@ -45,8 +45,8 @@ Your Gateway to Seamless Journeys
 🛫 ${td.airline} SPECIAL OFFER 🛬
 
 📅 Travel Dates:
-▶️ Departure: ${td.departureDate} | ${td.departureTime}
-◀️ Return: ${td.returnDate} | ${td.returnTime}
+🛫 Departure: ${td.departureDate} | ${td.departureTime}
+🛬 Return: ${td.returnDate} | ${td.returnTime}
 
 ✨ Package Includes:
 ✅ ${td.baggage} Baggage Allowance 🧳🎒

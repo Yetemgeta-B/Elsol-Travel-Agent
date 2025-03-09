@@ -7,8 +7,8 @@ import { toast } from '../../hooks/use-toast';
 import { Lock } from 'lucide-react';
 
 // For demo purposes - in a real app, this would be handled securely
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PASSWORD = 'admin123';
+const ADMIN_USERNAME = 'elsol';
+const ADMIN_PASSWORD = 'elsol2024';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -89,7 +89,7 @@ const Login = () => {
           </div>
           
           <div className="text-center text-sm text-gray-400 mt-4">
-            <p>For demo: username = "admin", password = "admin123"</p>
+            {/* <p>For demo: username = "admin", password = "admin123"</p> */}
           </div>
         </form>
       </div>

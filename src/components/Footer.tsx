@@ -88,9 +88,9 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-4 border-t border-gray-800">
-          <p className="text-center text-gray-400 hover:text-white transition-colors duration-300 text-sm py-2">
-            © {new Date().getFullYear()} ELSOL Travel. All rights reserved.
+        <div className="mt-6 pt-2 border-t border-gray-800">
+          <p className="text-center text-gray-400 hover:text-white transition-colors duration-300 text-sm py-1">
+            {new Date().getFullYear()} ELSOL Travel. All rights reserved.
           </p>
         </div>
       </div>

@@ -50,37 +50,37 @@ const Hero = () => {
 
       {/* Hero Content */}
       <motion.div 
-        className="relative z-10 h-full flex flex-col items-center justify-center px-4 text-center"
+        className="relative z-10 h-full flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.span 
-          className="inline-block py-1 px-3 rounded-full bg-elsol-sage/20 text-white text-sm font-medium mb-6 hover:bg-elsol-sage/30 transition-all duration-300 hover:scale-105"
+          className="inline-block py-1 px-3 rounded-full bg-elsol-sage/20 text-white text-xs sm:text-sm font-medium mb-4 sm:mb-6 hover:bg-elsol-sage/30 transition-all duration-300 hover:scale-105"
           variants={itemVariants}
         >
           IATA Accredited Agency
         </motion.span>
         <motion.h1 
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 max-w-5xl hover:text-shadow-glow transition-all duration-300"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6 max-w-5xl hover:text-shadow-glow transition-all duration-300"
           variants={itemVariants}
         >
           Your Gateway to World-Class Travel Experience
         </motion.h1>
         <motion.p 
-          className="text-xl text-white/90 mb-10 max-w-2xl hover:text-white transition-all duration-300"
+          className="text-lg sm:text-xl text-white/90 mb-8 sm:mb-10 max-w-2xl hover:text-white transition-all duration-300"
           variants={itemVariants}
         >
           IATA Accredited Agent with 5+ Years of Excellence
         </motion.p>
         <motion.div 
-          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+          className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto sm:space-x-4"
           variants={itemVariants}
         >
-          <a href="/blogs" className="elsol-button hover:shadow-glow transition-all duration-300 hover:scale-105">
+          <a href="/blogs" className="elsol-button w-full sm:w-auto hover:shadow-glow transition-all duration-300 hover:scale-105 text-center">
             Explore Blogs
           </a>
-          <a href="#contact" className="elsol-button-outline border-white text-white hover:bg-white hover:text-elsol-black hover:shadow-glow transition-all duration-300 hover:scale-105">
+          <a href="#contact" className="elsol-button-outline w-full sm:w-auto border-white text-white hover:bg-white hover:text-elsol-black hover:shadow-glow transition-all duration-300 hover:scale-105 text-center">
             Contact Us
           </a>
         </motion.div>
@@ -95,8 +95,18 @@ const Hero = () => {
       >
         <a href="#services" className="flex flex-col items-center text-white/80 hover:text-white transition-colors group">
           <span className="text-sm mb-2 group-hover:text-elsol-sage transition-colors duration-300">Scroll Down</span>
-          <svg className="w-6 h-6 group-hover:text-elsol-sage transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          <svg 
+            className="w-6 h-8 group-hover:text-elsol-sage transition-colors duration-300" 
+            viewBox="0 0 24 32" 
+            fill="none" 
+            stroke="currentColor"
+          >
+            {/* Mouse body */}
+            <rect x="5" y="1" width="14" height="24" rx="7" strokeWidth="2" />
+            {/* Scroll wheel */}
+            <line x1="12" y1="6" x2="12" y2="10" strokeWidth="2" />
+            {/* Scroll arrow */}
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 28 L8 32 L12 30 L16 32 L12 28" />
           </svg>
         </a>
       </motion.div>

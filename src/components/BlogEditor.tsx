@@ -7,9 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from '../hooks/use-toast';
 import { X, Plus, Minus } from 'lucide-react';
 import { TelegramBot } from '../services/TelegramBot';
+import { Image as ImageIcon, Link, Upload } from 'lucide-react';
+import { BlogPost, TravelDetails } from '../types/blog';
 
 interface BlogEditorProps {
-  post?: any;
+  post?: BlogPost;
   isEditing?: boolean;
   onCancel: () => void;
 }
@@ -21,6 +23,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTravelPost, setIsTravelPost] = useState(false);
+  const [imageInputType, setImageInputType] = useState<'url' | 'upload'>('url');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -37,11 +42,11 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       departureTime: '',
       returnTime: '',
       baggage: '',
-      phones: [''],
-      emails: ['elsoltravel5@gmail.com', 'eluua123@yahoo.com'],
+      phones: [],
+      emails: [''],
       price: '',
       additionalInfo: ''
-    }
+    } as TravelDetails
   });
 
   useEffect(() => {
@@ -55,13 +60,36 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         imageUrl: post.imageUrl,
         slug: post.slug,
         travelDetails: post.travelDetails || {
-          ...formData.travelDetails,
-          title: post.title
+          ...formData.travelDetails
         }
       });
+      setImagePreview(post.imageUrl);
       setIsTravelPost(!!post.travelDetails);
     }
   }, [isEditing, post]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "Error",
+          description: "Image size should be less than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setImagePreview(base64String);
+        setFormData(prev => ({ ...prev, imageUrl: base64String }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -77,11 +105,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       setFormData({
         ...formData,
         title: value,
-        slug: !formData.slug ? generatedSlug : formData.slug,
-        travelDetails: {
-          ...formData.travelDetails,
-          title: value
-        }
+        slug: !formData.slug ? generatedSlug : formData.slug
       });
     } else if (name.startsWith('travel.')) {
       const travelField = name.split('.')[1];
@@ -148,7 +172,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   const validateForm = () => {
     if (isTravelPost) {
       const td = formData.travelDetails;
-      if (!td.title || !td.airline || !td.departureDate || !td.returnDate || 
+      if (!td.airline || !td.departureDate || !td.returnDate || 
           !td.departureTime || !td.returnTime || !td.baggage || !td.phones.length) {
         toast({
           title: "Missing Travel Details",
@@ -174,27 +198,40 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      const currentDate = new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+    if (!formData.imageUrl && !selectedImage) {
+      toast({
+        title: "Error",
+        description: "Please provide an image",
+        variant: "destructive"
       });
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const currentDate = new Date().toISOString();
+      let telegramMessage = '';
       
-      const postData = {
+      if (isTravelPost) {
+        const td = formData.travelDetails;
+        telegramMessage = `🌟 NEW TRAVEL OPPORTUNITY 🌟\n\n${formData.title}\n\n✈️ ${td.airline}\n📅 ${td.departureDate} - ${td.returnDate}\n⏰ ${td.departureTime} - ${td.returnTime}\n🧳 ${td.baggage}\n\n💰 ${td.price || 'Contact for price'}\n\n📞 ${td.phones.join(', ')}\n📧 ${td.emails.join(', ')}\n\n${td.additionalInfo ? `ℹ️ ${td.additionalInfo}\n\n` : ''}`;
+      }
+
+      const newPost = {
         title: formData.title,
         excerpt: formData.excerpt,
         content: formData.content,
         author: formData.author,
         imageUrl: formData.imageUrl,
         slug: formData.slug,
-        id: isEditing && post ? post.id : crypto.randomUUID(),
         date: isEditing && post ? post.date : currentDate,
         readTime: isEditing && post ? post.readTime : "1 min read",
+        telegramMessage: isTravelPost ? telegramMessage : undefined,
         travelDetails: isTravelPost ? {
           ...formData.travelDetails,
           title: formData.title
@@ -202,14 +239,14 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       };
 
       if (isEditing && post) {
-        editBlogPost(postData);
+        editBlogPost(newPost);
         toast({
           title: "Success!",
           description: "Post updated successfully",
         });
       } else {
-        addBlogPost(postData);
-        await telegramBot.shareNewBlogPost(postData);
+        addBlogPost(newPost);
+        await telegramBot.shareNewBlogPost(newPost);
         toast({
           title: "Success!",
           description: "New post created and shared successfully",
@@ -230,9 +267,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
   };
 
   return (
-    <div className="w-full glass-panel rounded-xl p-6">
+    <div className="w-full glass-panel rounded-xl p-4 sm:p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-200">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-200">
           {isEditing ? 'Edit Post' : 'Create New Post'}
         </h2>
         <Button 
@@ -245,30 +282,32 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         </Button>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex items-center space-x-2 mb-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           <label className="text-sm font-medium text-gray-300">Post Type:</label>
-          <Button
-            type="button"
-            variant={!isTravelPost ? "default" : "outline"}
-            onClick={() => setIsTravelPost(false)}
-            className={!isTravelPost ? "bg-elsol-sage text-black" : "text-elsol-sage"}
-          >
-            Regular Post
-          </Button>
-          <Button
-            type="button"
-            variant={isTravelPost ? "default" : "outline"}
-            onClick={() => setIsTravelPost(true)}
-            className={isTravelPost ? "bg-elsol-sage text-black" : "text-elsol-sage"}
-          >
-            Travel Post
-          </Button>
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button
+              type="button"
+              variant={!isTravelPost ? "default" : "outline"}
+              onClick={() => setIsTravelPost(false)}
+              className={`flex-1 sm:flex-none ${!isTravelPost ? "bg-elsol-sage text-black" : "text-elsol-sage"}`}
+            >
+              Regular Post
+            </Button>
+            <Button
+              type="button"
+              variant={isTravelPost ? "default" : "outline"}
+              onClick={() => setIsTravelPost(true)}
+              className={`flex-1 sm:flex-none ${isTravelPost ? "bg-elsol-sage text-black" : "text-elsol-sage"}`}
+            >
+              Travel Post
+            </Button>
+          </div>
         </div>
 
         {/* Regular post fields */}
         {!isTravelPost && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div className="space-y-2">
               <label htmlFor="title" className="block text-sm font-medium text-gray-300">
                 Title*
@@ -279,7 +318,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Enter post title"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
             </div>
@@ -294,7 +333,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.slug}
                 onChange={handleChange}
                 placeholder="enter-url-slug"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
               <p className="text-xs text-gray-400">This will be used in the post URL</p>
@@ -310,24 +349,75 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.author}
                 onChange={handleChange}
                 placeholder="Author name"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-300">
-                Image URL*
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Featured Image
               </label>
-              <Input
-                id="imageUrl"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                className="bg-black/60 border-gray-700"
-                required
-              />
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                <Button
+                  type="button"
+                  variant={imageInputType === 'url' ? 'default' : 'outline'}
+                  className={`flex-1 sm:flex-none ${imageInputType === 'url' ? 'bg-elsol-sage text-black' : ''}`}
+                  onClick={() => setImageInputType('url')}
+                >
+                  <Link className="w-4 h-4 mr-2" />
+                  Image URL
+                </Button>
+                <Button
+                  type="button"
+                  variant={imageInputType === 'upload' ? 'default' : 'outline'}
+                  className={`flex-1 sm:flex-none ${imageInputType === 'upload' ? 'bg-elsol-sage text-black' : ''}`}
+                  onClick={() => setImageInputType('upload')}
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Image
+                </Button>
+              </div>
+
+              {imageInputType === 'url' ? (
+                <Input
+                  value={formData.imageUrl}
+                  onChange={(e) => {
+                    setFormData({ ...formData, imageUrl: e.target.value });
+                    setImagePreview(e.target.value);
+                  }}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-black/60 border-gray-700 w-full"
+                />
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center w-full">
+                    <label className="w-full flex flex-col items-center px-4 py-6 bg-black/60 text-gray-300 rounded-lg border-2 border-dashed border-elsol-sage/30 cursor-pointer hover:border-elsol-sage/50 transition-colors">
+                      <ImageIcon className="w-8 h-8 mb-2 text-elsol-sage" />
+                      <span className="text-sm">Click to upload image (max 5MB)</span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {imagePreview && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-300 mb-2">Preview:</p>
+                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -340,7 +430,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.excerpt}
                 onChange={handleChange}
                 placeholder="Brief description of the post"
-                className="bg-black/60 border-gray-700 h-24"
+                className="bg-black/60 border-gray-700 h-24 w-full"
                 required
               />
             </div>
@@ -355,7 +445,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.content}
                 onChange={handleChange}
                 placeholder="Full blog post content (HTML supported)"
-                className="bg-black/60 border-gray-700 h-64"
+                className="bg-black/60 border-gray-700 h-64 w-full"
                 required
               />
               <p className="text-xs text-gray-400">HTML tags are supported for formatting</p>
@@ -365,7 +455,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
 
         {/* Travel post fields */}
         {isTravelPost && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div className="space-y-2">
               <label htmlFor="title" className="block text-sm font-medium text-gray-300">
                 Title/Description*
@@ -375,10 +465,76 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g., በፍላይ ዱባይ አየር መንገድ ወደ ዱባይ"
-                className="bg-black/60 border-gray-700"
+                placeholder="e.g., Elsol travel agency"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Featured Image
+              </label>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                <Button
+                  type="button"
+                  variant={imageInputType === 'url' ? 'default' : 'outline'}
+                  className={`flex-1 sm:flex-none ${imageInputType === 'url' ? 'bg-elsol-sage text-black' : ''}`}
+                  onClick={() => setImageInputType('url')}
+                >
+                  <Link className="w-4 h-4 mr-2" />
+                  Image URL
+                </Button>
+                <Button
+                  type="button"
+                  variant={imageInputType === 'upload' ? 'default' : 'outline'}
+                  className={`flex-1 sm:flex-none ${imageInputType === 'upload' ? 'bg-elsol-sage text-black' : ''}`}
+                  onClick={() => setImageInputType('upload')}
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload Image
+                </Button>
+              </div>
+
+              {imageInputType === 'url' ? (
+                <Input
+                  value={formData.imageUrl}
+                  onChange={(e) => {
+                    setFormData({ ...formData, imageUrl: e.target.value });
+                    setImagePreview(e.target.value);
+                  }}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-black/60 border-gray-700 w-full"
+                />
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center w-full">
+                    <label className="w-full flex flex-col items-center px-4 py-6 bg-black/60 text-gray-300 rounded-lg border-2 border-dashed border-elsol-sage/30 cursor-pointer hover:border-elsol-sage/50 transition-colors">
+                      <ImageIcon className="w-8 h-8 mb-2 text-elsol-sage" />
+                      <span className="text-sm">Click to upload image (max 5MB)</span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {imagePreview && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-300 mb-2">Preview:</p>
+                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -391,7 +547,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.travelDetails.airline}
                 onChange={handleChange}
                 placeholder="e.g., FLYDUBAI"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
             </div>
@@ -407,7 +563,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                   value={formData.travelDetails.departureDate}
                   onChange={handleChange}
                   placeholder="e.g., Mar 18 ADDDXB"
-                  className="bg-black/60 border-gray-700"
+                  className="bg-black/60 border-gray-700 w-full"
                   required
                 />
               </div>
@@ -422,7 +578,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                   value={formData.travelDetails.returnDate}
                   onChange={handleChange}
                   placeholder="e.g., Mar 22 DXBADD"
-                  className="bg-black/60 border-gray-700"
+                  className="bg-black/60 border-gray-700 w-full"
                   required
                 />
               </div>
@@ -437,7 +593,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                   value={formData.travelDetails.departureTime}
                   onChange={handleChange}
                   placeholder="e.g., 04:45_09:55"
-                  className="bg-black/60 border-gray-700"
+                  className="bg-black/60 border-gray-700 w-full"
                   required
                 />
               </div>
@@ -452,7 +608,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                   value={formData.travelDetails.returnTime}
                   onChange={handleChange}
                   placeholder="e.g., 16:05_19:35"
-                  className="bg-black/60 border-gray-700"
+                  className="bg-black/60 border-gray-700 w-full"
                   required
                 />
               </div>
@@ -468,7 +624,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.travelDetails.baggage}
                 onChange={handleChange}
                 placeholder="e.g., 50Kg"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
                 required
               />
             </div>
@@ -483,7 +639,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                     value={phone}
                     onChange={(e) => handlePhoneChange(index, e.target.value)}
                     placeholder="Phone number"
-                    className="bg-black/60 border-gray-700"
+                    className="bg-black/60 border-gray-700 w-full"
                     required
                   />
                   <Button
@@ -521,7 +677,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.travelDetails.price}
                 onChange={handleChange}
                 placeholder="e.g., Starting from $599"
-                className="bg-black/60 border-gray-700"
+                className="bg-black/60 border-gray-700 w-full"
               />
             </div>
 
@@ -535,7 +691,21 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
                 value={formData.travelDetails.additionalInfo}
                 onChange={handleChange}
                 placeholder="Any additional details or notes"
-                className="bg-black/60 border-gray-700 h-24"
+                className="bg-black/60 border-gray-700 h-24 w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="author" className="block text-sm font-medium text-gray-300">
+                Author*
+              </label>
+              <Input
+                id="author"
+                name="author"
+                value={formData.author}
+                onChange={handleChange}
+                placeholder="Author name"
+                className="bg-black/60 border-gray-700 w-full"
+                required
               />
             </div>
           </div>
@@ -544,7 +714,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         <div className="flex space-x-4 pt-4">
           <Button 
             type="submit" 
-            className="bg-elsol-sage hover:bg-elsol-sage-light text-black"
+            className="bg-elsol-sage hover:bg-elsol-sage-light text-black w-full sm:w-auto"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving...' : isEditing ? 'Update Post' : 'Publish Post'}
@@ -553,7 +723,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
             type="button" 
             onClick={onCancel}
             variant="outline" 
-            className="border-elsol-sage text-elsol-sage hover:bg-elsol-sage hover:text-black"
+            className="border-elsol-sage text-elsol-sage hover:bg-elsol-sage hover:text-black w-full sm:w-auto"
           >
             Cancel
           </Button>
