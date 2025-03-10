@@ -1,9 +1,9 @@
 import emailjs from '@emailjs/browser';
 
 export class EmailService {
-  private static readonly SERVICE_ID = 'service_xusfolm'; // Replace with your EmailJS service ID
-  private static readonly TEMPLATE_ID = 'template_8f3flet'; // Replace with your EmailJS template ID
-  private static readonly PUBLIC_KEY = 'rRo4a0GFgxRyl7xEg'; // Replace with your EmailJS public key
+  private static readonly SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  private static readonly TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  private static readonly PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   static async sendEmail(data: {
     name: string;

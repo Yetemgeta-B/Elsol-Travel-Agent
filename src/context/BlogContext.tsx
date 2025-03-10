@@ -117,6 +117,7 @@ interface BlogContextType {
   editBlogPost: (post: BlogPost) => void;
   deleteBlogPost: (id: string) => void;
   getBlogPost: (slug: string) => BlogPost | undefined;
+  refreshBlogPosts: () => Promise<void>;
 }
 
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
@@ -136,22 +137,55 @@ interface BlogProviderProps {
 export const BlogProvider = ({ children }: BlogProviderProps) => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
 
+  // Function to refresh blog posts
+  const refreshBlogPosts = async () => {
+    try {
+      const storedPosts = localStorage.getItem('blogPosts');
+      if (storedPosts) {
+        setBlogPosts(JSON.parse(storedPosts));
+      } else {
+        setBlogPosts(initialBlogPosts);
+      }
+    } catch (error) {
+      console.error('Error refreshing blog posts:', error);
+    }
+  };
+
   // Initialize from localStorage or use initial posts
   useEffect(() => {
-    const storedPosts = localStorage.getItem('blogPosts');
-    if (storedPosts) {
-      setBlogPosts(JSON.parse(storedPosts));
-    } else {
-      setBlogPosts(initialBlogPosts);
-    }
+    refreshBlogPosts();
   }, []);
 
   // Update localStorage when posts change
   useEffect(() => {
     if (blogPosts.length > 0) {
       localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+      // Broadcast the change to other tabs/windows
+      const event = new CustomEvent('blogPostsUpdated', { detail: blogPosts });
+      window.dispatchEvent(event);
     }
   }, [blogPosts]);
+
+  // Listen for changes from other tabs/windows
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'blogPosts' && e.newValue) {
+        setBlogPosts(JSON.parse(e.newValue));
+      }
+    };
+
+    const handleBlogPostsUpdated = (e: CustomEvent<BlogPost[]>) => {
+      setBlogPosts(e.detail);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('blogPostsUpdated', handleBlogPostsUpdated as EventListener);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('blogPostsUpdated', handleBlogPostsUpdated as EventListener);
+    };
+  }, []);
 
   const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
     const newPost: BlogPost = {
@@ -177,7 +211,14 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
 
   return (
     <BlogContext.Provider
-      value={{ blogPosts, addBlogPost, editBlogPost, deleteBlogPost, getBlogPost }}
+      value={{ 
+        blogPosts, 
+        addBlogPost, 
+        editBlogPost, 
+        deleteBlogPost, 
+        getBlogPost,
+        refreshBlogPosts 
+      }}
     >
       {children}
     </BlogContext.Provider>
