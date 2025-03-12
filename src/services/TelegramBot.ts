@@ -15,11 +15,28 @@ interface TravelDetails {
 }
 
 export class TelegramBot {
-  private readonly token: string = "7607840158:AAGVqn228DlKAaM8QSgRnn3QRYi6jmrI-c4";
-  private readonly channelId: string = "-1002358332198";
+  private readonly token: string;
+  private readonly channelId: string;
   private readonly apiUrl: string;
+  private readonly isDevelopment: boolean;
 
   constructor() {
+    // Check if we're in development mode
+    this.isDevelopment = import.meta.env.MODE === 'development' || 
+                         import.meta.env.VITE_TELEGRAM_BOT_TOKEN === 'development';
+    
+    // Use environment variables for sensitive data
+    this.token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
+    this.channelId = import.meta.env.VITE_TELEGRAM_CHANNEL_ID || "";
+    
+    if (!this.token && !this.isDevelopment) {
+      console.warn('Telegram bot token not found in environment variables');
+    }
+    
+    if (!this.channelId && !this.isDevelopment) {
+      console.warn('Telegram channel ID not found in environment variables');
+    }
+    
     this.apiUrl = `https://api.telegram.org/bot${this.token}`;
   }
 
@@ -31,6 +48,18 @@ export class TelegramBot {
     author: string;
     travelDetails?: TravelDetails;
   }) {
+    // If in development mode, just log the post and return success
+    if (this.isDevelopment) {
+      console.log('Development mode: Would send to Telegram:', post);
+      return true;
+    }
+    
+    // If token or channel ID is missing, log a warning and return
+    if (!this.token || !this.channelId) {
+      console.warn('Telegram bot token or channel ID is missing. Skipping Telegram notification.');
+      return false;
+    }
+    
     try {
       // Use a hardcoded base URL for development, or window.location.origin for production
       const baseUrl = process.env.NODE_ENV === 'development' 

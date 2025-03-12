@@ -9,6 +9,7 @@ lerna-debug.log*
 .env.local
 .env.development
 .env.production
+.env.*
 
 # Build files
 build/
@@ -37,3 +38,8 @@ node_modules/
 
 # Specific files containing sensitive info
 src/pages/admin/Login.tsx
+src/services/TelegramBot.ts
+
+# Local development files
+.vercel
+.netlify

@@ -1,5 +1,6 @@
 {
   "name": "elsol-travel-agent",
+  "homepage": "https://yetemgeta-b.github.io/Elsol-Travel-Agent/",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -13,7 +14,9 @@
     "lint:fix": "eslint . --fix",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "postbuild": "echo 'Build completed successfully!'"
+    "postbuild": "echo 'Build completed successfully!'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -80,6 +83,7 @@
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "gh-pages": "^6.3.0",
     "globals": "^15.9.0",
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",

@@ -136,16 +136,25 @@ interface BlogProviderProps {
 
 export const BlogProvider = ({ children }: BlogProviderProps) => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [lastRefresh, setLastRefresh] = useState<number>(Date.now());
 
   // Function to refresh blog posts
   const refreshBlogPosts = async () => {
     try {
+      // Add a small random delay to prevent all clients from refreshing at exactly the same time
+      const randomDelay = Math.floor(Math.random() * 500);
+      await new Promise(resolve => setTimeout(resolve, randomDelay));
+      
       const storedPosts = localStorage.getItem('blogPosts');
       if (storedPosts) {
         setBlogPosts(JSON.parse(storedPosts));
       } else {
         setBlogPosts(initialBlogPosts);
+        // Initialize localStorage if it's empty
+        localStorage.setItem('blogPosts', JSON.stringify(initialBlogPosts));
       }
+      
+      setLastRefresh(Date.now());
     } catch (error) {
       console.error('Error refreshing blog posts:', error);
     }
@@ -154,14 +163,30 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
   // Initialize from localStorage or use initial posts
   useEffect(() => {
     refreshBlogPosts();
+    
+    // Set up a periodic refresh every 30 seconds
+    const refreshInterval = setInterval(() => {
+      refreshBlogPosts();
+    }, 30000);
+    
+    return () => clearInterval(refreshInterval);
   }, []);
 
   // Update localStorage when posts change
   useEffect(() => {
     if (blogPosts.length > 0) {
       localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+      
+      // Add a timestamp to track when the data was last updated
+      localStorage.setItem('blogPostsLastUpdated', Date.now().toString());
+      
       // Broadcast the change to other tabs/windows
-      const event = new CustomEvent('blogPostsUpdated', { detail: blogPosts });
+      const event = new CustomEvent('blogPostsUpdated', { 
+        detail: { 
+          posts: blogPosts,
+          timestamp: Date.now()
+        } 
+      });
       window.dispatchEvent(event);
     }
   }, [blogPosts]);
@@ -170,22 +195,45 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'blogPosts' && e.newValue) {
-        setBlogPosts(JSON.parse(e.newValue));
+        const newPosts = JSON.parse(e.newValue);
+        setBlogPosts(newPosts);
+      }
+      
+      if (e.key === 'blogPostsLastUpdated' && e.newValue) {
+        const lastUpdateTime = parseInt(e.newValue, 10);
+        // Only refresh if the update is newer than our last refresh
+        if (lastUpdateTime > lastRefresh) {
+          refreshBlogPosts();
+        }
       }
     };
 
-    const handleBlogPostsUpdated = (e: CustomEvent<BlogPost[]>) => {
-      setBlogPosts(e.detail);
+    const handleBlogPostsUpdated = (e: CustomEvent<{posts: BlogPost[], timestamp: number}>) => {
+      // Only update if the event data is newer than our last refresh
+      if (e.detail.timestamp > lastRefresh) {
+        setBlogPosts(e.detail.posts);
+        setLastRefresh(e.detail.timestamp);
+      }
     };
 
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('blogPostsUpdated', handleBlogPostsUpdated as EventListener);
 
+    // Add a visibility change listener to refresh when tab becomes visible again
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshBlogPosts();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('blogPostsUpdated', handleBlogPostsUpdated as EventListener);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [lastRefresh]);
 
   const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
     const newPost: BlogPost = {
