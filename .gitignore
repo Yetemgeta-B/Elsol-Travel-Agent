@@ -43,3 +43,4 @@ src/services/TelegramBot.ts
 # Local development files
 .vercel
 .netlify
+.vercel

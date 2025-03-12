@@ -244,6 +244,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
       }
 
       const newPost = {
+        id: isEditing && post ? post.id : '',
         title: formData.title,
         excerpt: formData.excerpt,
         content: formData.content,
@@ -255,7 +256,9 @@ const BlogEditor: React.FC<BlogEditorProps> = ({ post, isEditing = false, onCanc
         telegramMessage: isTravelPost ? telegramMessage : undefined,
         travelDetails: isTravelPost ? {
           ...formData.travelDetails,
-          title: formData.title
+          title: formData.title,
+          phones: formData.travelDetails.phones || [''],
+          emails: formData.travelDetails.emails || ['']
         } : undefined
       };
 
