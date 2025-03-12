@@ -182,7 +182,9 @@ const useToast = () => {
   };
 };
 
-export { useToast, type ToasterToast, type ToastActionProps, type ToastProps };
-export const toast = useToast().toast;
-
+// Define ToastActionProps only once
 export type ToastActionProps = React.ComponentPropsWithoutRef<typeof Toast>;
+
+// Export everything else
+export { useToast, type ToasterToast, type ToastProps };
+export const toast = useToast().toast;
