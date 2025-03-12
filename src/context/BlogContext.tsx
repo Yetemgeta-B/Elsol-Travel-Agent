@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { BlogPost } from '../types/blog';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../Config/firebaseConfig';
 
 // Initial sample blog posts
 const initialBlogPosts: BlogPost[] = [
@@ -234,6 +236,28 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [lastRefresh]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'blogPosts'), (snapshot) => {
+      const posts = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          author: data.author,
+          date: data.date,
+          readTime: data.readTime,
+          imageUrl: data.imageUrl,
+          slug: data.slug
+        } as BlogPost; // Ensure all fields are included
+      });
+      setBlogPosts(posts);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
     const newPost: BlogPost = {
