@@ -3,6 +3,7 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import ScrollButtons from './ScrollButtons';
+import { Toaster } from '@/components/ui/toaster';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showScrollButtons = true }) =
       </main>
       {showScrollButtons && <ScrollButtons />}
       <Footer />
+      <Toaster />
     </div>
   );
 };

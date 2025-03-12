@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { BlogPost } from '../types/blog';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../Config/firebaseConfig';
+import { toast } from '@/hooks/use-toast';
 
 // Initial sample blog posts
 const initialBlogPosts: BlogPost[] = [
@@ -71,7 +72,7 @@ const initialBlogPosts: BlogPost[] = [
     id: '3',
     title: 'The Ultimate Guide to Ethiopian Coffee Culture',
     excerpt: 'Experience the rich tradition of Ethiopian coffee ceremonies and learn about the birthplace of coffee.',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc vitae nunc. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc vitae nunc.',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc, vitae nunc. Nulla facilisi. Phasellus auctor, nisl eget ultricies ultrices, nunc nisl aliquam nunc, vitae aliquam nisl nunc vitae nunc.',
     author: 'Bethlehem Alemu',
     date: 'April 10, 2023',
     readTime: '6 min read',
@@ -139,6 +140,7 @@ interface BlogProviderProps {
 export const BlogProvider = ({ children }: BlogProviderProps) => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [lastRefresh, setLastRefresh] = useState<number>(Date.now());
+  const [lastKnownPostsCount, setLastKnownPostsCount] = useState<number>(0);
 
   // Function to refresh blog posts
   const refreshBlogPosts = async () => {
@@ -149,9 +151,26 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
       
       const storedPosts = localStorage.getItem('blogPosts');
       if (storedPosts) {
-        setBlogPosts(JSON.parse(storedPosts));
+        const parsedPosts = JSON.parse(storedPosts);
+        setBlogPosts(parsedPosts);
+        
+        // Check if we have new posts and show notification if needed
+        if (lastKnownPostsCount > 0 && parsedPosts.length > lastKnownPostsCount) {
+          const newPostsCount = parsedPosts.length - lastKnownPostsCount;
+          const newPost = parsedPosts[0]; // Most recent post is first in the array
+          
+          toast({
+            title: "New Blog Post Added!",
+            description: `"${newPost.title}" by ${newPost.author} is now available.`,
+            duration: 5000,
+          });
+        }
+        
+        // Update the last known count
+        setLastKnownPostsCount(parsedPosts.length);
       } else {
         setBlogPosts(initialBlogPosts);
+        setLastKnownPostsCount(initialBlogPosts.length);
         // Initialize localStorage if it's empty
         localStorage.setItem('blogPosts', JSON.stringify(initialBlogPosts));
       }
@@ -198,6 +217,22 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'blogPosts' && e.newValue) {
         const newPosts = JSON.parse(e.newValue);
+        
+        // Check if we have new posts
+        if (newPosts.length > blogPosts.length) {
+          const newPost = newPosts.find(newPost => 
+            !blogPosts.some(existingPost => existingPost.id === newPost.id)
+          );
+          
+          if (newPost) {
+            toast({
+              title: "New Blog Post Added!",
+              description: `"${newPost.title}" by ${newPost.author} is now available.`,
+              duration: 5000,
+            });
+          }
+        }
+        
         setBlogPosts(newPosts);
       }
       
@@ -213,6 +248,22 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
     const handleBlogPostsUpdated = (e: CustomEvent<{posts: BlogPost[], timestamp: number}>) => {
       // Only update if the event data is newer than our last refresh
       if (e.detail.timestamp > lastRefresh) {
+        // Check for new blog posts
+        if (e.detail.posts.length > blogPosts.length) {
+          const newPosts = e.detail.posts.filter(newPost => 
+            !blogPosts.some(existingPost => existingPost.id === newPost.id)
+          );
+          
+          if (newPosts.length > 0) {
+            const latestPost = newPosts[0];
+            toast({
+              title: "New Blog Post Added!",
+              description: `"${latestPost.title}" by ${latestPost.author} is now available.`,
+              duration: 5000,
+            });
+          }
+        }
+        
         setBlogPosts(e.detail.posts);
         setLastRefresh(e.detail.timestamp);
       }
@@ -235,7 +286,7 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
       window.removeEventListener('blogPostsUpdated', handleBlogPostsUpdated as EventListener);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [lastRefresh]);
+  }, [lastRefresh, blogPosts]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'blogPosts'), (snapshot) => {
@@ -253,11 +304,28 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
           slug: data.slug
         } as BlogPost; // Ensure all fields are included
       });
+      
+      // Check if we have new posts from Firebase
+      if (posts.length > blogPosts.length) {
+        const newPosts = posts.filter(newPost => 
+          !blogPosts.some(existingPost => existingPost.id === newPost.id)
+        );
+        
+        if (newPosts.length > 0) {
+          const latestPost = newPosts[0];
+          toast({
+            title: "New Blog Post Added!",
+            description: `"${latestPost.title}" by ${latestPost.author} is now available.`,
+            duration: 5000,
+          });
+        }
+      }
+      
       setBlogPosts(posts);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [blogPosts.length]);
 
   const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
     const newPost: BlogPost = {
@@ -265,6 +333,13 @@ export const BlogProvider = ({ children }: BlogProviderProps) => {
       id: Date.now().toString(),
     };
     setBlogPosts((prevPosts) => [newPost, ...prevPosts]);
+    
+    // Show notification for the new blog post
+    toast({
+      title: "New Blog Post Added!",
+      description: `"${post.title}" by ${post.author} is now available.`,
+      duration: 5000,
+    });
   };
 
   const editBlogPost = (updatedPost: BlogPost) => {

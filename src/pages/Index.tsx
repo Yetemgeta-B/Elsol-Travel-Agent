@@ -9,6 +9,7 @@ import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import ScrollButtons from '../components/ScrollButtons';
+import { Toaster } from '@/components/ui/toaster';
 
 const Index = () => {
   // Smooth scroll implementation
@@ -57,6 +58,7 @@ const Index = () => {
         <Testimonials />
       </main>
       <Footer />
+      <Toaster />
     </div>
   );
 };
