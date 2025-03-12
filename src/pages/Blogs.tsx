@@ -1,15 +1,18 @@
+
 import React, { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import { Search } from 'lucide-react';
 import { useBlogContext } from '../context/BlogContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import AdminButton from '../components/AdminButton';
+import { useToast } from '@/hooks/use-toast';
 
 const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { blogPosts } = useBlogContext();
+  const { blogPosts, refreshBlogPosts } = useBlogContext();
+  const { toast } = useToast();
   
   const filteredPosts = blogPosts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -19,7 +22,17 @@ const Blogs = () => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    
+    // Initial refresh
+    refreshBlogPosts();
+    
+    // Set up interval for real-time updates
+    const intervalId = setInterval(() => {
+      refreshBlogPosts();
+    }, 5000); // Check for updates every 5 seconds
+    
+    return () => clearInterval(intervalId);
+  }, [refreshBlogPosts]);
 
   return (
     <div className="min-h-screen bg-gradient-glass text-gray-200">
@@ -75,18 +88,23 @@ const Blogs = () => {
       <div className="elsol-section">
         <div className="container mx-auto px-4">
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post, index) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index, duration: 0.5 }}
-                >
-                  <BlogCard post={post} />
-                </motion.div>
-              ))}
-            </div>
+            <AnimatePresence>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredPosts.map((post, index) => (
+                  <motion.div
+                    key={post.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ delay: 0.1 * index, duration: 0.5 }}
+                    layout
+                    className="blog-post-card"
+                  >
+                    <BlogCard post={post} />
+                  </motion.div>
+                ))}
+              </div>
+            </AnimatePresence>
           ) : (
             <div className="text-center py-16">
               <h3 className="text-2xl font-semibold mb-2">No results found</h3>
