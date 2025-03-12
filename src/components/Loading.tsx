@@ -25,7 +25,7 @@ const Loading: React.FC = () => {
           ))}
         </div>
 
-        {/* Landmarks */}
+        {/* Landmarks
         <div className="absolute bottom-0 w-full h-32 flex items-end justify-around">
           <motion.div
             className="landmark eiffel-tower"
@@ -45,7 +45,7 @@ const Loading: React.FC = () => {
             animate={{ opacity: 0.7, y: 0 }}
             transition={{ delay: 0.9 }}
           />
-        </div>
+        </div> */}
 
         {/* Centered plane */}
         <motion.div

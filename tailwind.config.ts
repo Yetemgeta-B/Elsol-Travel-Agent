@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -116,6 +115,15 @@ export default {
 					'0%, 49.99%': { opacity: '0' },
 					'66.66%, 83.32%': { opacity: '1' },
 					'100%': { opacity: '0' }
+				},
+				'glow-pulse': {
+					'0%': { opacity: '0.3' },
+					'50%': { opacity: '0.6' },
+					'100%': { opacity: '0.3' }
+				},
+				'glow-move': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
 				}
 			},
 			animation: {
@@ -127,7 +135,9 @@ export default {
 				'zoom-in': 'zoom-in 0.6s ease-out',
 				'carousel': 'carousel 18s infinite',
 				'carousel-2': 'carousel-2 18s infinite',
-				'carousel-3': 'carousel-3 18s infinite'
+				'carousel-3': 'carousel-3 18s infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'glow-move': 'glow-move 8s ease-in-out infinite'
 			},
 			fontFamily: {
 				sans: ['SF Pro Display', 'Inter', 'sans-serif']
@@ -135,6 +145,11 @@ export default {
 			transitionProperty: {
 				'height': 'height',
 				'spacing': 'margin, padding'
+			},
+			boxShadow: {
+				'glow-sm': '0 0 5px 0 rgba(83, 133, 44, 0.3), 0 0 10px 0 rgba(83, 133, 44, 0.2)',
+				'glow': '0 0 10px 0 rgba(83, 133, 44, 0.4), 0 0 20px 0 rgba(83, 133, 44, 0.2)',
+				'glow-lg': '0 0 15px 0 rgba(83, 133, 44, 0.5), 0 0 30px 0 rgba(83, 133, 44, 0.3)'
 			}
 		}
 	},

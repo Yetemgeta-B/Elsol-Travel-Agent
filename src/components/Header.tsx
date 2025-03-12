@@ -44,12 +44,12 @@ const Header = () => {
   }, [mobileMenuOpen]);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-2 sm:px-4 mx-2 sm:mx-6 mt-2 sm:mt-6 ${isScrolled ? 'backdrop-blur-lg bg-black/50' : ''}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-2 sm:px-4 mx-2 sm:mx-6 mt-2 sm:mt-6`}>
       <div className="container mx-auto px-2 sm:px-4 md:px-8 max-w-screen-2xl">
-        <div className={`relative rounded-full backdrop-blur-md bg-black/30 border border-elsol-sage/10 py-2 sm:py-3 px-3 sm:px-4 overflow-hidden ${isScrolled ? 'shadow-lg' : ''}`}>
+        <div className={`relative rounded-full backdrop-blur-md border ${isScrolled ? 'border-elsol-sage/50 shadow-glow' : 'border-elsol-sage/10'} transition-all duration-300 py-2 sm:py-3 px-3 sm:px-4 overflow-hidden`}>
           {/* Animated glow effect */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-elsol-sage/0 via-elsol-sage/10 to-elsol-sage/0 animate-glow-move" />
+            <div className={`absolute inset-0 bg-gradient-to-r from-elsol-sage/0 via-elsol-sage/20 to-elsol-sage/0 ${isScrolled ? 'animate-glow-pulse opacity-50' : 'animate-glow-move opacity-10'}`} />
           </div>
 
           <div className="relative z-10 flex flex-wrap items-center justify-between">        

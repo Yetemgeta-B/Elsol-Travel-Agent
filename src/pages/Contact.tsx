@@ -30,11 +30,22 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      // Validate form data before submission
+      if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        throw new Error('Please fill in all required fields');
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+      
       await EmailService.sendEmail(formData);
       
       toast({
-        title: "Success",
-        description: "Your message has been sent successfully. We'll get back to you soon!",
+        title: "Message Sent Successfully",
+        description: "Thank you for contacting us. We'll get back to you soon!",
       });
 
       // Reset form
@@ -45,11 +56,21 @@ const Contact = () => {
         subject: '',
         message: '',
       });
+      
+      // Scroll to top to show the success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
     } catch (error) {
       console.error('Error sending email:', error);
+      
+      // Provide a user-friendly error message
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Failed to send message. Please try again later or contact us directly.";
+        
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
+        title: "Error Sending Message",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {

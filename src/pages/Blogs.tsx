@@ -73,7 +73,7 @@ const Blogs = () => {
 
       {/* Blog posts grid */}
       <div className="elsol-section">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4">
           {filteredPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPosts.map((post, index) => (
