@@ -131,6 +131,15 @@
     @apply text-lg md:text-xl text-gray-300 mb-10 max-w-3xl hover:text-white transition-all duration-300 relative;
   }
 
+  /* Header spacing classes */
+  .page-header {
+    @apply pt-28 sm:pt-32 md:pt-36 pb-8 sm:pb-10;
+  }
+  
+  .section-header {
+    @apply mb-12 sm:mb-16;
+  }
+
   /* Effects and Shadows */
   .shadow-glow {
     box-shadow: 0 0 15px rgba(83, 133, 44, 0.5), 0 0 30px rgba(83, 133, 44, 0.3);
@@ -250,31 +259,33 @@
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Enhanced */
 ::-webkit-scrollbar {
-  width: 10px;
-  background-color: #010101;
+  width: 12px;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #6ca93b;
+  background-color: #53852c;
   border-radius: 10px;
-  border: 2px solid rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 5px rgba(83, 133, 44, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #AAC0A0;
+  background-color: #6ca93b;
+  box-shadow: 0 0 10px rgba(83, 133, 44, 0.5);
 }
 
 ::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   border-radius: 10px;
 }
 
-/* Firefox */
+/* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #95A78D rgba(0, 0, 0, 0.8);
+  scrollbar-color: #53852c rgba(0, 0, 0, 0.9);
 }
 
 /* Animation keyframes */
@@ -330,6 +341,25 @@
   height: 20px;
   top: -8px;
   right: 10px;
+}
+
+/* Enhanced mobile styles */
+@media (max-width: 640px) {
+  .elsol-button, .elsol-button-outline {
+    @apply py-1.5 px-4 text-sm;
+  }
+  
+  .section-heading {
+    @apply text-2xl mb-3;
+  }
+  
+  .section-subheading {
+    @apply text-base mb-6;
+  }
+  
+  .elsol-section {
+    @apply py-12 px-4;
+  }
 }
 
 .plane-container {
