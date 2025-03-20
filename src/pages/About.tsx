@@ -53,11 +53,32 @@ const teamMembers = [
 const About = () => {
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-black via-black to-black/50">
-        {/* Header spacing to prevent navbar overlap */}
-        <div className="h-20"></div>
+      <div className="min-h-screen">
+        <div className="page-header">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div className="text-center section-header">
+              <motion.h1 
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-elsol-sage"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                About Elsol Travel Agency
+              </motion.h1>
+              <div className="h-1.5 w-24 bg-elsol-sage/30 mx-auto mt-4 mb-6 rounded-full"></div>
+              <motion.p 
+                className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Your trusted partner in creating unforgettable travel experiences since 2018
+              </motion.p>
+            </motion.div>
+          </div>
+        </div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center mb-12">
             <motion.h1 
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-elsol-sage mb-4"
@@ -78,7 +99,6 @@ const About = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Vision */}
             <motion.div 
               className="glass-panel p-6 rounded-xl"
               initial={{ opacity: 0, y: 20 }}
@@ -94,7 +114,6 @@ const About = () => {
               </p>
             </motion.div>
 
-            {/* Mission */}
             <motion.div 
               className="glass-panel p-6 rounded-xl"
               initial={{ opacity: 0, y: 20 }}
@@ -110,7 +129,6 @@ const About = () => {
               </p>
             </motion.div>
 
-            {/* Values */}
             <motion.div 
               className="glass-panel p-6 rounded-xl md:col-span-2 lg:col-span-1"
               initial={{ opacity: 0, y: 20 }}
@@ -142,7 +160,6 @@ const About = () => {
             </motion.div>
           </div>
 
-          {/* Team Section */}
           <motion.div 
             className="mt-16 text-center"
             initial={{ opacity: 0, y: 20 }}
@@ -174,7 +191,6 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* Contact Section */}
           <motion.div 
             className="mt-16 text-center"
             initial={{ opacity: 0, y: 20 }}

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
@@ -5,16 +6,17 @@ import Layout from '../components/Layout';
 const Services = () => {
   return (
     <Layout>
-      <div className="pt-24 pb-16">
+      <div className="page-header">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center section-header"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-elsol-sage">Our Services</h1>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-elsol-sage">Our Services</h1>
+            <div className="h-1.5 w-20 bg-elsol-sage/30 mx-auto mt-4 mb-6 rounded-full"></div>
+            <p className="text-lg text-gray-300 max-w-3xl mx-auto mobile-text">
               Experience world-class travel services with ELSOL Travel. We offer comprehensive solutions tailored to your needs.
             </p>
           </motion.div>

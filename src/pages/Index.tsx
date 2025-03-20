@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -8,6 +9,7 @@ import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import ScrollButtons from '../components/ScrollButtons';
+import { Toaster } from '@/components/ui/toaster';
 
 const Index = () => {
   // Smooth scroll implementation
@@ -39,18 +41,24 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       <Header />
       <ScrollButtons />
       <main className="flex-grow">
         <Hero />
+        <div className="py-4 md:py-8"></div> {/* Added spacing */}
         <Services />
+        <div className="py-4 md:py-8"></div> {/* Added spacing */}
         <Destinations />
+        <div className="py-4 md:py-8"></div> {/* Added spacing */}
         <About />
+        <div className="py-2 md:py-4"></div> {/* Added spacing */}
         <Contact />
+        <div className="py-2 md:py-4"></div> {/* Added spacing */}
         <Testimonials />
       </main>
       <Footer />
+      <Toaster />
     </div>
   );
 };

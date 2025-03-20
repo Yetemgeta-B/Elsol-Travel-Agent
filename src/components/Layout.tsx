@@ -1,7 +1,9 @@
+
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import ScrollButtons from './ScrollButtons';
+import { Toaster } from '@/components/ui/toaster';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,13 +12,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, showScrollButtons = true }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-black via-gray-900 to-black">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
         {children}
       </main>
       {showScrollButtons && <ScrollButtons />}
       <Footer />
+      <Toaster />
     </div>
   );
 };
